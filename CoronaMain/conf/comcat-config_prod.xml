@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--  include "-Dcomcat-be.config=<path of comcat config file>" in application parameters -->
+<comcat-config>
+    <home-dir>/opt/sasuapps/corona/shared/corona/corona/corona/</home-dir>
+
+   <hpsb-output-data-dir>/opt_apps/comcat/r_curr/common/task_master/output/hpsb</hpsb-output-data-dir>
+<config-dir>conf</config-dir>
+	<dax-config-file>
+        comcat-dax-config.xml
+    </dax-config-file>
+    <plsqlprofiler-flag>false</plsqlprofiler-flag>
+
+   <dirs>
+      
+
+      <output-data-dir>output</output-data-dir>
+
+      <ecfg-data-dir>ecfg</ecfg-data-dir>
+
+      <log-dir>/opt/sasuapps/corona/shared/corona/corona/corona/logs//</log-dir>
+   </dirs>
+
+   <config-files>
+      <stage-conf>comcat-app-prop-stage.xml</stage-conf>
+
+      <runtime-conf>comcat-be-runtime.xml</runtime-conf>
+
+<!-- use full path to share file in master and system environments -->
+      <carepack-conf>/opt/sasuapps/corona/shared/corona/corona/corona/conf/carepack-config.properties</carepack-conf>
+
+<!-- Express config flag is added as part of IPG supplies -->
+      <express-conf>/opt/sasuapps/corona/shared/corona/corona/corona/conf/express-config.properties</express-conf>
+   </config-files>
+
+   <full-load-params>
+      <num-failures>50</num-failures>
+
+      <interval>2</interval>
+   </full-load-params>
+
+   <email>
+<!--email-server below is MACHINE GENERATED-DO  NOT CHANGE HERE.Change properties files & run build_be_config.sh -->
+      <email-server>g4u0213c.houston.hp.com</email-server>
+
+      <wwcomcat-email>hpat620.atl.hp.com@hp.com</wwcomcat-email>
+
+      <sys-admin-emails>pdl.comcat@hp.com,eccload@comspec.com,PDLcorona-L3@hp.com</sys-admin-emails>
+   </email>
+
+   <on-development>n</on-development>
+
+   <region>SYSTEM</region>
+
+   <ftp id="ecfg">
+<!--ecfghost below is MACHINE GENERATED-DO  NOT CHANGE HERE.Change properties files & run build_be_config.sh -->
+      <host>tnt608.tam.hp.com</host>
+
+<!--ecfglogin below is MACHINE GENERATED-DO  NOT CHANGE HERE.Change properties files & run build_be_config.sh -->
+      <login>anonymous</login>
+
+<!--ecfgpasswd below is MACHINE GENERATED-DO  NOT CHANGE HERE.Change properties files & run build_be_config.sh -->
+      <password>anonymous</password>
+   </ftp>
+
+</comcat-config>
+

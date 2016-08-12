@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<comcat-dax-config>
+
+	<stmt-group id="REPLICATION_STMT_GROUP_ID">
+
+		<stmt id="UPDATE_REPLICATION_IPCS_TIMESTAMP">
+
+			<![CDATA[
+				update REPLICATION_INFO 
+				SET RI_LAST_REPLICATED_DATE = {?:date1}, 
+				RI_LAST_MODIFIED_DATE = SYSDATE, 
+				RI_LAST_MODIFIED_BY = {?:string3}
+				where RI_SOURCE={?:string1}
+				and RI_OBJECT={?:string2}
+			]]>
+		</stmt>
+		
+		
+		<stmt id="REPLICATION_INFO">
+			<![CDATA[
+				select 
+					{id}:=RI_ID,
+					{source}:=RI_SOURCE,
+					{objectName}:=RI_OBJECT_NAME,
+					{replicationMethod}:=RI_REPLICATION_METHOD,
+					{batchSize}:=RI_BATCH_SIZE,
+					{permPickSize}:=RI_PERM_PICK_SIZE
+				from REPLICATION_INFO 
+			]]>
+		</stmt>
+
+		<stmt id="FETCH_CONFIG_PRICE_REPLICATION_EVENTS">
+			<![CDATA[
+				select 
+					{cphId}:=CPR_CPHI_ID,
+					{groupId}:=CPR_GROUP_ID,
+					{cphiLastModifiedDate}:=CPR_LAST_MODIFIED_DATE,
+					{cphiLastModifiedDateStr}:=to_char(CPR_CPHI_LAST_MODIFIED_DATE,'mm/dd/yyyy hh24:mi:ss')
+				from CONFIG_PRICE_REPLICATION CPR
+				where CPR.CPR_PROCESSED_BY = {?:string2}
+				ORDER BY CPR_LAST_MODIFIED_DATE ASC
+			]]>
+		</stmt>
+
+
+		<stmt id="PICK_REPLICATION_EVENTS_FOR_GROUP">
+			<![CDATA[
+			update config_price_replication cpr set CPR.CPR_PROCESSED_BY ={?:string2}, CPR.CPR_STATUS = 'PICKED', CPR.CPR_LAST_MODIFIED_DATE=sysdate
+				where cpr.cpr_cphi_id in (    
+				select cpr_cphi_id from
+				( select cpr2.cpr_cphi_id  from config_price_replication cpr2
+					where nvl(CPR2.CPR_STATUS,'READY')='READY'
+					AND CPR2.CPR_GROUP_ID= {?:int1} 
+					and cpr2.CPR_CPHI_LAST_MODIFIED_DATE >= (select ji.JI_LAST_RUN_DATE from JOB_INFO ji where ji.ji_group_id=cpr2.cpr_group_id)
+					order by cpr2.cpr_last_modified_date asc
+				 ) inner where ROWNUM < {?:long1}
+				)
+			]]>
+		</stmt>
+
+		<stmt id="UPDATE_CPR_STATUS_TO_ERR_OR_READY">
+			<![CDATA[
+				UPDATE CONFIG_PRICE_REPLICATION CPR
+				set CPR.CPR_PROCESSED_BY =null, CPR.CPR_STATUS = {?:string1}, cpr.cpr_last_modified_date=sysdate
+				where CPR.CPR_STATUS='PICKED'
+				AND CPR.CPR_PROCESSED_BY={?:string2}
+			]]>
+		</stmt>
+
+
+		<stmt id="UPDATE_REPLICATION_GROUP_TIMESTAMP">
+
+			<![CDATA[
+				UPDATE JOB_INFO JI
+				SET JI.JI_LAST_MODIFIED_DATE= {?:date1}, JI.JI_LAST_RUN_DATE= {?:date1}, 
+				JI.JI_PROCESSED_BY = {?:string2}
+				where JI.JI_GROUP_ID={?:string1}
+			]]>
+		</stmt>
+
+		<stmt id="UPDATE_REPLICATION_GROUP_LAST_MOD_TIMESTAMP">
+
+			<![CDATA[
+				UPDATE JOB_INFO JI
+				SET JI.JI_LAST_MODIFIED_DATE= sysdate
+				where JI.JI_GROUP_ID={?:string1}
+			]]>
+		</stmt>
+
+		<stmt id="FETCH_PRICE_HEADER_AND_COMP_DATA">
+			<![CDATA[ 
+				SELECT	  
+						{configIdStr}:=CONFIG_ID,
+						{priceId}:=PRICE_ID,
+						{shipToCountry}:=SHIP_TO_COUNTRY,
+						{priceDescriptor}:=PRICE_DESCRIPTOR,
+						  {materialId}:=material_id, 
+						  {priceSource}:=price_source,
+						  {listPrice}:=listprice, 
+						  {netPrice}:=netprice, 
+						  {priceStartDate}:=price_start_date, 
+						  {priceEndDate}:=price_end_date,
+						  {additionalData}:=additional_data, 
+						  {lastModifiedDate}:=last_modified_date, 
+						  {delFlag}:=delete_flag
+				from price_cache_replication_info
+				where primary_key_id={?:long1}
+			]]>
+		</stmt>
+
+		<stmt id="FETCH_IPCS_PRICE_DATA">
+				
+				<![CDATA[
+					SELECT {materialId}:=MATERIAL_ID
+						FROM PRICE_CACHE_REPLICATION 
+						where CONFIG_ID={?:configId}
+						and PRICE_ID={?:priceId}
+						and SHIP_TO_COUNTRY={?:shipToCountry}
+						and PRICE_DESCRIPTOR={?:priceDescriptor}
+				]]>
+		</stmt>
+		
+		<stmt id="UPDATE_IPCS_PRICE_INFO">
+			<![CDATA[
+				update price_cache_replication 
+				set  price_source={?:priceSource},
+					listprice={?:listPrice},
+					netprice={?:netPrice},
+					price_start_date = {?:priceStartDate},
+					price_end_date = {?:priceEndDate},
+					last_modified_date={?:lastModifiedDate},
+					additional_data={?:additionalData}
+		       		where config_id={?:configId} 
+		       		and price_id={?:priceId} 
+		       		and ship_to_country={?:shipToCountry}
+		       		and price_descriptor={?:priceDescriptor}
+		       		and material_id={?:materialId}
+		       	]]>
+		</stmt>
+		
+		<stmt id="INSERT_IPCS_PRICE_INFO">
+			<![CDATA[
+				INSERT INTO price_cache_replication
+				(config_id,
+					price_id,
+					ship_to_country,
+					 price_descriptor,
+					 material_id,
+					 price_source,
+					 listprice,
+					 netprice,
+					 price_start_date,
+					 price_end_date,
+					 last_modified_date,
+					additional_data)
+				VALUES(   {?:configId},
+					{?:priceId} ,
+					{?:shipToCountry},
+					{?:priceDescriptor},
+	  	          		{?:materialId},
+	  	          		{?:priceSource},
+					{?:listPrice},
+					{?:netPrice},
+					{?:priceStartDate},
+					{?:priceEndDate},
+					{?:lastModifiedDate},
+					{?:additionalData})
+			]]>
+		</stmt>
+		
+		<stmt id="DELETE_IPCS_PRICE_INFO">
+			<![CDATA[
+				delete from price_cache_replication 
+				       	where config_id={?:configId} 
+				       	and price_id={?:priceId} 
+				       	and ship_to_country={?:shipToCountry}
+				       	and price_descriptor={?:priceDescriptor}
+				       	and material_id={?:materialId}
+			]]>
+		</stmt>
+
+	</stmt-group>
+
+
+	<stmt-group id="BACKUP_GROUP">
+			<stmt id="FETCH_PRICE_IFNO_COMP_DATA_TABLE">
+		
+			<![CDATA[ 
+			SELECT 
+				{id}:=PI_ID,
+				{cphiId}:=PI_CPHI_ID,
+				{productId}:=PI_PRODUCT_ID,
+				{productNumber}:=PI_PRODUCT_NUMBER,
+				{productOptionCd}:=PI_PRODUCT_OPTION_CD,
+				{priceStartDate}:=PI_PRICE_START_DATE,
+				{priceEndDate}:=PI_PRICE_END_DATE,
+				{netPrice}:=PI_NET_PRICE,
+				{netPriceBase}:=PI_NET_PRICE_BASE,
+				{netPriceOption}:=PI_NET_PRICE_OPTION,
+				{listPrice}:=PI_LIST_PRICE,
+				{listPriceBase}:=PI_LIST_PRICE_BAS,
+				{listPriceOption}:=PI_LIST_PRICE_OPTION,
+				{priceSourceBase}:=PI_PRICE_SOURCE_BASE,
+				{priceSourceOption}:=PI_PRICE_SOURCE_OPTION,
+				{priceSource}:=PI_PRICE_SOURCE,
+				{dealNumberBase}:=PI_DEAL_NUMBER_BASE,
+				{dealNumberOption}:=PI_DEAL_NUMBER_OPTION,
+				{dealNumber}:=PI_DEAL_NUMBER,
+				{agreementBase}:=PI_AGREEMENT_BASE,
+				{agreementOption}:=PI_AGREEMENT_OPTION,
+				{agreement}:=PI_AGREEMENT,
+				{tierIdBase}:=PI_TIER_ID_BASE,
+				{tierIdOption}:=PI_TIER_ID_OPTION,
+				{tierId}:=PI_TIER_ID,
+				{dealTypeBase}:=PI_DEAL_TYPE_BASE,
+				{dealTypeOption}:=PI_DEAL_TYPE_OPTION,
+				{dealType}:=PI_DEAL_TYPE,
+				{priceStatus}:=PI_PRICE_STATUS,
+				{priceErrorMsg}:=PI_PRICE_ERROR_MSG,
+				{quantityBreak}:=PI_QUANTITY_BREAK,
+				{genericPriceFlag}:=PI_GENERIC_PRICE_FLAG,
+				{whereFromInfo}:=PI_WHERE_FROM_INFO,
+				{whereFromConfig}:=PI_WHERE_FROM_CONFIG,
+				{versionDate}:=PI_VERSION_DATE,
+				{whereFromLng}:=PI_WHERE_FROM_LNG,
+				{updtFlag}:=PI_UPDT_FLAG,
+				{trnId}:=PI_TRN_ID,
+				{delFlag}:=PI_DEL_FLAG
+			FROM PRICE_INFO
+					where PI_CPHI_ID={?:long1}
+			]]>
+		</stmt>
+		<stmt id="FETCH_IPCS_REPLICATION_DATA">
+			
+			<![CDATA[	
+				SELECT	{bundleId}:=CPI_BUNDLE_ID,
+						{priceId}:=CPI_PRICE_ID,
+						{shipToCountry}:=CPI_SHIP_TO_COUNTRY,
+						{priceDescriptor}:=CPI_PRICE_DESCRIPTOR,
+						{materialId}:=PI_PRODUCT_ID,
+						{priceSourceBase}:=PI_PRICE_SOURCE_BASE,
+						{listPrice}:=PI_LIST_PRICE,
+						{netPrice}:=PI_NET_PRICE,
+						{priceStartDate}:=PI_PRICE_START_DATE,
+						{priceEndDate}:=PI_PRICE_END_DATE,
+						{priceWhereFrom}:=PI_WHERE_FROM_INFO,
+						{lastModifiedDate}:=PI_LAST_MODIFIED_DATE
+				FROM CONFIG_PERMUTATION_INFO CPI, PRICE_INFO PI, 
+					CONFIG_COMPONENTS_INFO CCI, CONFIG_PRICE_HEADER_INFO CPHI,
+					REPLICATION_INFO RI
+				WHERE RI.RI_OBJECT_NAME = 'REPLICATION_IPCS'
+						AND CPI.CPI_LAST_MODIFIED_DATE >=RI.RI_LAST_REPLICATED_DATE
+						AND CPI.CPI_OVERALL_STATUS = 'V'
+						AND CPHI.CPHI_PRICE_ID = CPI.CPI_PRICE_ID
+						AND CPHI.CPHI_BUNDLE_ID = CPI.CPI_BUNDLE_ID
+						AND CPHI.CPHI_SHIP_TO_COUNTRY = CPI.CPI_SHIP_TO_COUNTRY
+						AND CPHI.CPHI_PRICE_DESCRIPTOR = CPI.CPI_PRICE_DESCRIPTOR
+						AND CCI.CCI_BUNDLE_ID = CPI.CPI_BUNDLE_ID
+						AND CCI.CCI_SHIP_TO_COUNTRY = CPI.CPI_SHIP_TO_COUNTRY
+						AND PI.PI_PRODUCT_ID = CCI.CCI_PRODUCT_ID
+						AND PI.PI_CPHI_ID = CPHI.CPHI_ID
+						AND SYSDATE BETWEEN PI_PRICE_START_DATE AND PI_PRICE_END_DATE
+						AND ROWNUM <= {?:int1}
+					order by PI_LAST_MODIFIED_DATE asc
+			]]>
+
+		</stmt>
+		
+		<stmt id="FETCH_CONFIG_PRICE_HEADER_DATA">
+			<![CDATA[ 
+			SELECT {id}:=CPHI_ID,
+					{priceId}:=CPHI_PRICE_ID,
+					{priceIdType}:=CPHI_PRICE_ID_TYPE,
+					{bundleId}:=CPHI_BUNDLE_ID,
+					{shipToCountry}:=CPHI_SHIP_TO_COUNTRY,
+					{priceDescriptor}:=CPHI_PRICE_DESCRIPTOR,
+					{shipToGeo}:=CPHI_SHIP_TO_GEO,
+					{priceGeo}:=CPHI_PRICE_GEO,
+					{currency}:=CPHI_CURRENCY,
+					{recipient}:=CPHI_RECIPIENT,
+					{priceProcedure}:=CPHI_PRICE_PROCEDURE,
+					{incoTerm}:=CPHI_INCO_TERM,
+					{priceListType}:=CPHI_PRICE_LIST_TYPE,
+					{priceStatus}:=CPHI_PRICE_STATUS,
+					{priceErrorMsg}:=CPHI_PRICE_ERROR_MSG,
+					{delFlag}:=CPHI_DEL_FLAG
+				FROM CONFIG_PRICE_HEADER_INFO 
+				where cphi_id={?:long1}
+			]]>
+		</stmt>
+
+		<stmt id="FETCH_IPCS_PRICE_DATA_old">
+				
+				<![CDATA[
+					SELECT {materialId}:=MATERIAL_ID,
+						{lastModifiedDate}:=LAST_MODIFIED_DATE
+						FROM PRICE_CACHE_REPLICATION 
+						where CONFIG_ID={?:int1}
+						and PRICE_ID={?:string1}
+						and SHIP_TO_COUNTRY={?:string2}
+						and PRICE_DESCRIPTOR={?:string3}
+				]]>
+		</stmt>
+
+		<stmt id="PICK_REPLICATION_EVENTS_FOR_GROUP">
+			<!-- LAST_PROCESSED_DATE is missing from job_info , for time being i am using last_modified_Date -->
+			<![CDATA[
+				update config_price_replication cpr set CPR.CPR_PROCESSED_BY ={?:string2}, CPR.CPR_STATUS = 'PICKED', CPR.CPR_LAST_MODIFIED_DATE=sysdate
+                where nvl(CPR.CPR_STATUS,'READY')='READY'
+				AND CPR.CPR_GROUP_ID={?:int1} 
+                and cpr.CPR_CPHI_LAST_MODIFIED_DATE >= (select ji.JI_LAST_RUN_DATE from JOB_INFO ji where ji.ji_group_id=cpr.cpr_group_id)
+                and ROWNUM < {?:long1}
+			]]>
+		</stmt>
+
+	</stmt-group>
+
+</comcat-dax-config>

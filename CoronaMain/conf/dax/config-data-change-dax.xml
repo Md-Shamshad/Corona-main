@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<comcat-dax-config>
+
+	<stmt-group id="GROUP_CONFIG_DATA_CHANGE">
+
+		<stmt id="ADD_CONFIG_PRICE_EVENTS">
+			<![CDATA[	
+				call Config_Data_Change.add_config_price_events(
+				{o:returnCode},{o:msg})	
+			]]>
+		</stmt>
+
+		<stmt id="ADD_CONFIG_CNTRY_EVENTS">
+			<![CDATA[	
+				call Config_Data_Change.add_config_cntry_events(
+				{o:returnCode},{o:msg})	
+			]]>
+		</stmt>			
+
+		<stmt id="ADD_CONFIG_PERMUTATION_EVENTS">
+			<![CDATA[	
+				call Config_Data_Change.add_config_perm_events(
+				{o:returnCode},{o:msg})	
+			]]>
+		</stmt>	
+		
+		<stmt id="ADD_PRODUCT_DESC_EVENTS">
+			<![CDATA[	
+				call Config_Data_Change.add_product_desc_events(
+				{o:returnCode},{o:msg})	
+			]]>
+		</stmt>
+		
+		<stmt id="ADD_LIST_PRICE_EVENTS">
+			<![CDATA[	
+				call Config_Data_Change.add_list_price_events(
+				{o:returnCode},{o:msg})	
+			]]>
+		</stmt>		
+		
+		<stmt id="PROCESS_CONFIG_PRICE_DATA">
+			<![CDATA[	
+				call Config_Data_Change.process_config_price_data({i:dceId},
+				{i:configPriceHeaderInfo|CORONA_SCH.CONFIG_PRICE_HEADER_INFO_TBL:CORONA_SCH.TY_CONFIG_PRICE_HEADER_INFO:id,recipient,priceProcedure,priceId,bundleId,shipToCountry,priceDescriptor,priceIdType,shipToGeo,priceGeo,currency,incoTerm,priceListType,priceStatus,priceErrorMsg,createdDate,createdBy,lastModifiedDate,lastModifiedBy,delFlag,srcTrnId,trnId,action,updtFlag,srcPkey},
+				{i:priceInfo|CORONA_SCH.PRICE_INFO_TBL:CORONA_SCH.TY_PRICE_INFO:id,recipient,priceProcedure,priceId,productId,productNumber,productOptionCd,bundleId,shipToCountry,priceDescriptor,priceIdType,shipToGeo,priceGeo,currency,incoTerm,priceListType,netPrice,netPriceBase,netPriceOption,listPrice,listPriceBase,listPriceOption,priceSourceBase,priceSourceOption,dealNumberBase,dealNumberOption,agreementBase,agreementOption,tierIdBase,tierIdOption,priceStartDate,priceEndDate,priceStatus,priceErrorMsg,quantityBreak,genericPriceFlag,whereFromInfo,versionDate,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,trnId,delFlag,whereFromLng,dealTypeBase,dealTypeOption,priceSource,dealNumber,agreement,tierId,dealType,srcTrnId,action,whereFromConfig,configQty},
+				{o:returnCode},{o:msg})	
+			]]>
+		</stmt>			
+
+		<stmt id="PROCESS_CONFIG_PRICE">
+			<![CDATA[	
+				call Config_Data_Change.process_config_price_new({i:dceId},{o:returnCode},{o:msg})
+			]]>
+		</stmt>			
+
+		
+		<stmt id="PROCESS_CONFIG_PERMUTATION_DATA">
+			<![CDATA[	
+				call Config_Data_Change.process_config_perm_data({i:dceId},
+				 {i:configPermutationInfo|CORONA_SCH.CONFIG_PERMUTATION_INFO_TBL:CORONA_SCH.TY_CONFIG_PERMUTATION_INFO:id,priceId,bundleId,shipToCountry,priceDescriptor,genericPriceFlag,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,priceProcedure,delFlag,overallStatus,regionCode,custKey,overallEol,priceIdType,configProdId,srcTrnId,trnId,action,cppiId,registerIPCS,registerPRS,parentBundleId,cpiActualRegion,cpiCustSegment},
+				 {o:returnCode},{o:msg})	
+			]]>
+		</stmt>	
+		
+		<stmt id="PROCESS_CONFIG_CNTRY_DATA">
+			<![CDATA[	
+				call Config_Data_Change.process_config_cntry_data({i:dceId},
+				 {i:configHeaderInfo|CORONA_SCH.CONFIG_HEADER_INFO_TBL:CORONA_SCH.TY_CONFIG_HEADER_INFO:id,bundleId,shipToCountry,baseProductId,registerFlag,configCntryEol,kmatId,validityStatus,errorCode,errorMsg,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,configDesc,delFlag,regionCode,srcTrnId,trnId,action,bomFrmt},
+				 {i:configComponentInfo|CORONA_SCH.CONFIG_COMPONENTS_INFO_TBL:CORONA_SCH.TY_CONFIG_COMPONENTS_INFO:id,bundleId,shipToCountry,productId,pl,startingPointFlag,qty,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,delFlag,srcTrnId,trnId,action},
+				 {i:productDescription|CORONA_SCH.PRODUCT_DESCRIPTION_TBL:CORONA_SCH.TY_PRODUCT_DESCRIPTION:id,productId,locale,shortDesc,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,shortDescSrc,srcTrnId,trnId,action},
+				 {o:returnCode},{o:msg})	
+			]]>
+		</stmt>	
+		
+		<stmt id="PROCESS_PRODUCT_DESC_DATA">
+			<![CDATA[	
+				call Config_Data_Change.process_product_desc_data({i:dceId},
+				 {i:productDescription|CORONA_SCH.PRODUCT_DESCRIPTION_TBL:CORONA_SCH.TY_PRODUCT_DESCRIPTION:id,productId,locale,shortDesc,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,shortDescSrc,srcTrnId,trnId,action},
+				 {o:returnCode},{o:msg})	
+			]]>
+		</stmt>	
+		
+		<stmt id="GET_CONFIG_PRICE_DATA_CHANGE">
+			<![CDATA[	
+				call Config_Data_Change.get_config_price_data_change({i:dceId},
+				{i:trnId},{i:priceId},{i:bundleId},{i:shipToGeo},{i:priceGeo},
+				{i:currency},{i:incoTerm},{i:priceListType},
+				{o:configPriceHeaderInfo|CORONA_SCH.CONFIG_PRICE_HEADER_INFO_TBL:CORONA_SCH.TY_CONFIG_PRICE_HEADER_INFO:id,recipient,priceProcedure,priceId,bundleId,shipToCountry,priceDescriptor,priceIdType,shipToGeo,priceGeo,currency,incoTerm,priceListType,priceStatus,priceErrorMsg,createdDate,createdBy,lastModifiedDate,lastModifiedBy,delFlag,srcTrnId,trnId,action,updtFlag,srcPkey},
+				{o:priceInfo|CORONA_SCH.PRICE_INFO_TBL:CORONA_SCH.TY_PRICE_INFO:id,recipient,priceProcedure,priceId,productId,productNumber,productOptionCd,bundleId,shipToCountry,priceDescriptor,priceIdType,shipToGeo,priceGeo,currency,incoTerm,priceListType,netPrice,netPriceBase,netPriceOption,listPrice,listPriceBase,listPriceOption,priceSourceBase,priceSourceOption,dealNumberBase,dealNumberOption,agreementBase,agreementOption,tierIdBase,tierIdOption,priceStartDate,priceEndDate,priceStatus,priceErrorMsg,quantityBreak,genericPriceFlag,whereFromInfo,versionDate,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,trnId,delFlag,whereFromLng,dealTypeBase,dealTypeOption,priceSource,dealNumber,agreement,tierId,dealType,srcTrnId,action,whereFromConfig,configQty},
+				{o:returnCode},{o:msg})	
+			]]>
+		</stmt>
+		
+		<stmt id="GET_CONFIG_PERMUTATION_DATA_CHANGE">
+			<![CDATA[	
+				call Config_Data_Change.get_config_perm_data_change({i:dceId},
+				 {i:trnId},{i:priceId},{i:bundleId},{i:shipToCountry},{i:priceDescriptor},
+				 {o:configPermutationInfo|CORONA_SCH.CONFIG_PERMUTATION_INFO_TBL:CORONA_SCH.TY_CONFIG_PERMUTATION_INFO:id,priceId,bundleId,shipToCountry,priceDescriptor,genericPriceFlag,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,priceProcedure,delFlag,overallStatus,regionCode,custKey,overallEol,priceIdType,configProdId,srcTrnId,trnId,action,cppiId,registerIPCS,registerPRS,parentBundleId,cpiActualRegion,cpiCustSegment},
+				 {o:returnCode},{o:msg})	
+			]]>
+		</stmt>
+
+		<stmt id="GET_CONFIG_CNTRY_DATA_CHANGE">
+			<![CDATA[	
+				call Config_Data_Change.get_config_cntry_data_change({i:dceId},
+				 {i:trnId},{i:bundleId},{i:shipToCountry},
+				 {o:configHeaderInfo|CORONA_SCH.CONFIG_HEADER_INFO_TBL:CORONA_SCH.TY_CONFIG_HEADER_INFO:id,bundleId,shipToCountry,baseProductId,registerFlag,configCntryEol,kmatId,validityStatus,errorCode,errorMsg,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,configDesc,delFlag,regionCode,srcTrnId,trnId,action,bomFrmt},
+				 {o:configComponentInfo|CORONA_SCH.CONFIG_COMPONENTS_INFO_TBL:CORONA_SCH.TY_CONFIG_COMPONENTS_INFO:id,bundleId,shipToCountry,productId,pl,startingPointFlag,qty,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,delFlag,srcTrnId,trnId,action},
+				 {o:productDescription|CORONA_SCH.PRODUCT_DESCRIPTION_TBL:CORONA_SCH.TY_PRODUCT_DESCRIPTION:id,productId,locale,shortDesc,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,shortDescSrc,srcTrnId,trnId,action},
+				 {o:returnCode},{o:msg})	
+			]]>
+		</stmt>
+		
+		<stmt id="GET_PRODUCT_DESC_DATA_CHANGE">
+			<![CDATA[	
+				call Config_Data_Change.get_product_desc_data_change({i:dceId},
+				 {i:trnId},
+				 {o:productDescription|CORONA_SCH.PRODUCT_DESCRIPTION_TBL:CORONA_SCH.TY_PRODUCT_DESCRIPTION:id,productId,locale,shortDesc,createdDate,createdBy,lastModifiedDate,lastModifiedBy,updtFlag,shortDescSrc,srcTrnId,trnId,action},
+				 {o:returnCode},{o:msg})	
+			]]>
+		</stmt>
+		
+		<stmt id="ADD_PROPAGATION_EVENTS">
+			<![CDATA[	
+				call Config_Data_Change.add_propagation_events(
+				 {i:propagationEvent|CORONA_SCH.PROPAGATION_EVENT_TBL:CORONA_SCH.TY_PROPAGATION_EVENT:id,srcEventId,processKey,processType,processingStatus,startDate,endDate,retryCnt,errCode,errMsg,createdDate,createdBy,lastModifiedDate,lastModifiedBy,eventSkipFlag,comment,processedBy,groupId,priority,source,groupObject1},
+				 {o:returnCode},{o:msg})	
+			]]>
+		</stmt>
+		<stmt id="PROCESS_LIST_PRICE_UPDATE">
+			<![CDATA[	
+				call Config_Data_Change.PROCESS_LIST_PRICE_UPDATE({i:dceId},{o:returnCode},{o:msg})
+			]]>
+		</stmt>	
+		
+		<stmt id="PROCESS_LIST_PRICE_INSERT">
+			<![CDATA[	
+				call Config_Data_Change.PROCESS_LIST_PRICE_INSERT({i:dceId},{o:returnCode},{o:msg})
+			]]>
+		</stmt>			
+		
+	</stmt-group>
+
+</comcat-dax-config>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+  
+<comcat-dax-config>
+
+<stmt-group id="ERROR_CODE">
+
+        <stmt id="getErrorCodes">
+          
+          SELECT {mainCode}:= ec.ehf_module_id,
+	      	
+	      	{subCode}:= ec.sub_error_code,
+	       	{serverity}:= ec.serverity_code,
+	        {lastModifiedBy}:= ec.last_modified_by,
+	        {shortDesc}:= ec.description,
+	        {solution}:= ec.solution,
+	        {mainCodeModule}:= em.module_name
+	  
+	  FROM ehf_error_code ec, ehf_error_module em 
+	  where ec.ehf_module_id = em.ehf_module_id 
+	  order by ec.ehf_module_id
+          
+          
+        </stmt>
+        
+               
+</stmt-group>
+
+
+<stmt-group id="NOTIFICATION">
+
+	  <stmt id="getNotificationIdSeq">
+	       select {notificationId}:=EHF_NOTIFICATION_ID_SEQ.NEXTVAL from dual
+	  </stmt>
+	  
+	 	  
+	  <stmt id="getNotification">
+            <![CDATA[
+          	SELECT {notificationId}:= n.EHF_NOTIFICATION_ID,
+	      		{requestId}:= n.REQUEST_SOURCE,
+	      		{requestSubId}:= n.REQUEST_SUB_SOURCE,
+	       		{address}:= nr.RECIPIENT_EMAIL_ADDRESS,
+	        	{status}:= nr.STATUS,
+	        	{lastModifiedDate}:= nr.LAST_MODIFIED_DATE
+	        		  
+	  	FROM ehf_notification n, ehf_notification_recipient nr 
+	  	WHERE  nr.LAST_MODIFIED_DATE > (SYSDATE-{?:interval}/1440)
+	  	AND n.request_source = {?:requestId}
+	  	AND (n.request_sub_source is NULL or n.request_sub_source = {?:requestSubId})
+	  	AND n.ehf_notification_id = nr.ehf_notification_id 
+	  	AND nr.STATUS = 'OK'
+	   ]]>   	
+		
+        </stmt>
+        
+        
+	  <stmt id="saveNotification">
+	  	INSERT INTO ehf_notification (EHF_NOTIFICATION_ID,
+	  		  REQUEST_SOURCE,
+	  		  REQUEST_SUB_SOURCE,
+	  		  CREATED_BY,
+	  		  LAST_MODIFIED_BY)
+	  	VALUES(   {?:notificationId},
+	  	          {?:requestId},
+	  	          {?:requestSubId},
+	  	          {?:lastModifiedBy},
+	  	          {?:lastModifiedBy})
+	  
+	   </stmt>
+	   
+	  	   
+	   <stmt id="saveNotificationRecipient">
+	     	INSERT INTO ehf_notification_recipient (EHF_NOTIFICATION_RECIPIENT_ID,
+	     	  	  EHF_NOTIFICATION_ID,	
+	     		  RECIPIENT_EMAIL_ADDRESS,
+	     		  STATUS,
+	     		  CREATED_BY,
+	     		  LAST_MODIFIED_BY)
+	     			   
+	     	VALUES({?:notificationRecipientId} 
+	     	 		|| EHF_NOTIFICATION_RECIPIENT_SEQ.NEXTVAL,
+	     	          {?:notificationId},
+	     	          {?:address},
+	     	          {?:status},
+	     	          {?:lastModifiedBy},
+	     	          {?:lastModifiedBy})
+	   </stmt>
+	   
+	   
+</stmt-group>
+
+</comcat-dax-config>
+

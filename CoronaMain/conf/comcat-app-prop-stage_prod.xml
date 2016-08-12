@@ -1,0 +1,1155 @@
+<comcat-be-stage>
+
+<!-- Event based propagation changes Start-->
+<stage id="stg_generic_cfg_replace" type="SP">
+	   <name>BE_CATALOG_CONFIG_DLC.REPLACE_GCFG_IN_CATALOG</name>
+	   <desc>thru evf</desc>
+	   <sp-name>BE_CATALOG_CONFIG_DLC.REPLACE_GCFG_IN_CATALOG</sp-name>
+	   <sp-param-id>eventid</sp-param-id>
+</stage>
+
+<stage id="stg_generic_cfg_desc_update" type="SP">
+	   <name>BE_CATALOG_CONFIG_DLC.UPDATE_GCFG_DESC_IN_CATALOG</name>
+	   <desc>thru evf</desc>
+   	   <sp-name>BE_CATALOG_CONFIG_DLC.UPDATE_GCFG_DESC_IN_CATALOG</sp-name>
+	<sp-param-id>eventid</sp-param-id>
+  </stage>
+
+        <stage id="stg_src_sla_changes" type="SP">
+		<name>BE_RDD.APPLY_RDD_TO_MASTER_SRC</name>
+		<desc></desc>
+		<sp-name>BE_RDD.APPLY_RDD_TO_MASTER_SRC</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+        <stage id="stg_create_events_for_new_deal" type="SP">
+                <name>BE_DEAL.CREATE_EVENTS_FOR_NEW_DEAL</name>
+                <desc></desc>
+                <sp-name>BE_DEAL.CREATE_EVENTS_FOR_NEW_DEAL</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="stg_create_events_for_new_deal_price" type="SP">
+	        <name>BE_DEAL.CREATE_EVENTS_FOR_NEW_DEAL_PRC</name>
+	        <desc></desc>
+	        <sp-name>BE_DEAL.CREATE_EVENTS_FOR_NEW_DEAL_PRC</sp-name>
+	        <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="stg_create_events_for_full_load" type="SP">
+	        <name>BE_DEAL.CREATE_EVENTS_FOR_FULL_LOAD</name>
+	        <desc>Puts the catalogs in the queue for full load</desc>
+	        <sp-name>BE_DEAL.CREATE_EVENTS_FOR_FULL_LOAD</sp-name>
+	        <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="stg_catalog_fe_std_upload_incr" type="SP">
+                <name>FE_UPLOAD.UPLOAD_3PO_STANDARD_INCR</name>
+                <desc></desc>
+                <sp-name>FE_UPLOAD.UPLOAD_3PO_STANDARD_INCR</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="stg_patsy_discount" type="SP">
+		<name>CAT_RATE_CONVERSION.RATE_CONVERT_DISCOUNT_SRC_INCR</name>
+		<desc></desc>
+		<sp-name>CAT_RATE_CONVERSION.RATE_CONVERT_DISCOUNT_SRC_INCR</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+        <stage id="stg_catalog_fe_upload_3po_incr" type="SP">
+                <name>FE_UPLOAD.UPLOAD_3PO_INCR</name>
+                <desc>incr upload 3po</desc>
+                <sp-name>FE_UPLOAD.UPLOAD_3PO_INCR</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="stg_catalog_upload_bundle_incr" type="SP">
+                <name>FE_BUNDLE_UPLOAD.UPLOAD_BUNDLE_INCR</name>
+                <desc>incr upload bundle</desc>
+                <sp-name>FE_BUNDLE_UPLOAD.UPLOAD_BUNDLE_INCR</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="stg_catalog_upload_incr" type="SP">
+                <name>FE_ADD_DEL_MST_PROD.PROCESS_UPDLOAD_STD_PRODS_INCR</name>
+                <desc></desc>
+                <sp-name>FE_ADD_DEL_MST_PROD.PROCESS_UPDLOAD_STD_PRODS_INCR</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="publish_standard_catalog" type="SP">
+                <name>STANDARD_FULL_WRAPPER.PUBLISH_STANDARD_CATALOG</name>
+                <desc>adds the standard catalog to publish queue</desc>
+                <sp-name>STANDARD_FULL_WRAPPER.PUBLISH_STANDARD_CATALOG</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="load_pub_queue_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.BACKEND_ADD_TO_QUEUE</name>
+		<desc>adds to the publish queue</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.Backend_Add_To_Queue</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+
+        <stage id="incr_update_master_options" type="SP">
+                <name>BE_MASTER_ITEM.STG_INCR_UPDATE_MASTER_OPTIONS</name>
+                <desc>updates custom master catalog price source table</desc>
+                <sp-name>BE_MASTER_ITEM.STG_INCR_UPDATE_MASTER_OPTIONS</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="incr_update_content" type="SP">
+		<name>BE_MASTER_ITEM.STG_INCR_UPDATE_CONTENT</name>
+		<desc>incremental updates of content for both master and child catalog</desc>
+		<sp-name>BE_MASTER_ITEM.STG_INCR_UPDATE_CONTENT</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+
+	<stage id="incr_update_catalog_options" type="SP">
+		<name>BE_MASTER_ITEM.STG_INCR_UPD_CATALOG_OPTIONS</name>
+		<desc>updates cat item options table</desc>
+		<sp-name>BE_MASTER_ITEM.STG_INCR_UPD_CATALOG_OPTIONS</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+         <stage id="incr_update_catalog_item" type="SP">
+		<name>BE_MASTER_ITEM.STG_INCR_UPDATE_CATALOG_ITEM</name>
+		<desc>incremental  updates on catalog item </desc>
+		<sp-name>BE_MASTER_ITEM.STG_INCR_UPDATE_CATALOG_ITEM</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+        <stage id="incr_pricing_filter" type="SP">
+		<name>BE_MASTER_ITEM.STG_INCR_SPECIAL_PRICING</name>
+		<desc>Based on the specila pricing price falg deal prices are decided</desc>
+		<sp-name>BE_MASTER_ITEM.STG_INCR_SPECIAL_PRICING</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="update_master_item_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_update_master_item</name>
+		<desc>updates custom master catalog item</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_UPDATE_MASTER_ITEM</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+
+	<stage id="update_master_psource_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_UPDATE_MASTER_PSOURCE</name>
+		<desc>updates custom master catalog price source table</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_UPDATE_MASTER_PSOURCE</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_rate_conversion_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.CAT_RATE_POPAGATION</name>
+		<desc>updates reseller margin in cat_item_price</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.CAT_RATE_POPAGATION</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="stdcat_merge_and_price_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_STDCAT_MERGE_PRICE</name>
+		<desc>general catalog merge and pricing update </desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_STDCAT_MERGE_PRICE</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	
+	<stage id="update_cat_zone_charge_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.UPDATE_CATALOG_ITEM_CHARGE</name>
+		<desc>updates zone chargein cat_item_price</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.UPDATE_CATALOG_ITEM_CHARGE</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_master_options_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_UPDATE_MASTER_OPTIONS</name>
+		<desc>updates custom master catalog price source table</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_UPDATE_MASTER_OPTIONS</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+
+	</stage>
+
+	<stage id="apply_special_pricing_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_APPLY_SPECIAL_FILTER</name>
+		<desc>based on the pricing flag value deal prices logic applied</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_APPLY_SPECIAL_FILTER</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_fusion_orderability_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_VALIDATE_CATALOG</name>
+		<desc>updates options table with fusion orderability info</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_VALIDATE_CATALOG</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_plc_orderability_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.validate_catalog_stg</name>
+		<desc>updates cat_item_options table with plc orderability info</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.validate_catalog_stg</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+
+	<stage id="update_cross_sell_item_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_UPDATE_CS_MASTER</name>
+		<desc>updates cross sell table</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_UPDATE_CS_MASTER</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	
+	<stage id="update_xsell_zone_charge_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.UPDATE_XSELL_CATITEM_CHARGE</name>
+		<desc>updates zone chargein xsell_item_price</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.UPDATE_XSELL_CATITEM_CHARGE</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_catalog_item_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_UPDATE_CATALOG_ITEM</name>
+		<desc>updates catalog item level table</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_UPDATE_CATALOG_ITEM</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_catalog_options_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_UPDATE_CATALOG_OPTIONS</name>
+		<desc>updates cat item options table</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_UPDATE_CATALOG_OPTIONS</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_content_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_UPDATE_CONTENT</name>
+		<desc>updates content for both master and child</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_UPDATE_CONTENT</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="stg_add_child_missing_ctc" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_add_child_missing_ctc</name>
+		<desc>updates content for both child in incremental way</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_add_child_missing_ctc</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+
+	<stage id="master_rdd_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.Apply_Rdd_to_Master</name>
+		<desc>store procedure Apply_Rdd_to_Master</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.Apply_Rdd_to_Master</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="stg_update_sales_bundle_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_update_sales_bundle</name>
+		<desc>auto creation of sales bundle instances for the customer master</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_update_sales_bundle</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="stg_update_catalog_bundle_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_update_cat_bundle</name>
+		<desc>store procedure BE_BUNDLE.stg_update_cat_bundle</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_update_cat_bundle</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="stg_update_bundle_price_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_update_bundle_price</name>
+		<desc>store procedure BE_BUNDLE.stg_update_bundle_price</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_update_bundle_price</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="stg_update_bundle_long_desc_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_update_bundle_long_desc</name>
+		<desc>store procedure BE_BUNDLE.stg_update_bundle_long_desc</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_update_bundle_long_desc</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="bundle_alert_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_comcat_bundle_alerts</name>
+		<desc>store procedure Be_Bundle.stg_comcat_bundle_alerts</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_comcat_bundle_alerts</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="stg_update_bndl_fusn_ord_stat_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_update_bndl_fusn_ord_stat</name>
+		<desc>updates bundle table with fusion orderability info</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_update_bndl_fusn_ord_stat</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="upd_cat_item_prod_mass_removal_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.UPD_CAT_ITEM_PROD_MASS_REMOVAL</name>
+		<desc>Update cat item for prod mass removal</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.UPD_CAT_ITEM_PROD_MASS_REMOVAL</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="check_ctg_delete_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.Catalog_Filter</name>
+		<desc>The products belongs to any of the nodes that is marked for deletion and marks such products for deletion</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.Catalog_Filter</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="del_obs_prod_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_delobs_products</name>
+		<desc>store procedure  deletes prod marked as D</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_delobs_products</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+	
+	<stage id="del_obs_prices" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.stg_delobs_prices</name>
+		<desc>store procedure  deletes prices marked as D</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.stg_delobs_prices</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>	
+
+	<stage id="mvc_pub_load_pub_queue_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.ADD_CATALOG</name>
+		<desc>adds to the mvc publish queue</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.ADD_CATALOG</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+
+	<stage id="load_pub_queue" type="SP">
+		<name>Ep_Publish.BACKEND_ADD_TO_QUEUE</name>
+		<desc>adds to the publish queue</desc>
+		<sp-name>Ep_Publish.Backend_Add_To_Queue</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+         <stage id="stg_register_master_with_prs_full" type="SP">
+		<name>CUSTOM_FULL_WRAPPER.STG_REGISTER_MASTER_WITH_PRS</name>
+		<desc>Registers with PRS</desc>
+		<sp-name>CUSTOM_FULL_WRAPPER.STG_REGISTER_MASTER_WITH_PRS</sp-name>
+	        <sp-param-id>eventid</sp-param-id>
+	</stage>
+
+
+        <stage id="propagate_cat_item_full" type="SP">
+                <name>STANDARD_FULL_WRAPPER.propagate_cat_item</name>
+                <desc>updates cat_item</desc>
+                <sp-name>STANDARD_FULL_WRAPPER.PROPAGATE_CAT_ITEM</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="propagate_item_price_source_full" type="SP">
+                <name>STANDARD_FULL_WRAPPER.prop_item_price_source</name>
+                <desc>updates cat_item_price_source</desc>
+                <sp-name>STANDARD_FULL_WRAPPER.prop_item_price_source</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="stg_merge_price_for_stdcat_full" type="SP">
+                <name>STANDARD_FULL_WRAPPER.stg_mrg_price_for_stdcat</name>
+                <desc>Standard catalog merge and pricing update </desc>
+                <sp-name>STANDARD_FULL_WRAPPER.stg_mrg_price_for_stdcat</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="propagate_cat_item_price_full" type="SP">
+                <name>STANDARD_FULL_WRAPPER.propagate_cat_item_price</name>
+                <desc>updates cat_item_price</desc>
+                <sp-name>STANDARD_FULL_WRAPPER.propagate_cat_item_price</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="propagate_cat_item_options_full" type="SP">
+                <name>STANDARD_FULL_WRAPPER.propagate_cat_item_opts</name>
+                <desc>updates cat_item_options</desc>
+                <sp-name>STANDARD_FULL_WRAPPER.propagate_cat_item_opts</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+	<stage id="update_cat_valid_status_full" type="SP">
+                <name>STANDARD_FULL_WRAPPER.set_cop_valid_cat_status</name>
+                <desc>validate the products status in the standard and master catalog</desc>
+                <sp-name>STANDARD_FULL_WRAPPER.set_cop_valid_cat_status</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="update_product_status_full" type="SP">
+                <name>STANDARD_FULL_WRAPPER.val_prods_for_plc_lclp_om</name>
+                <desc>validate the products status in the standard catalog</desc>
+                <sp-name>STANDARD_FULL_WRAPPER.val_prods_for_plc_lclp_om</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="update_hide_flag_full" type="SP">
+                <name>STANDARD_FULL_WRAPPER.stg_mstr_cat_prod_filter</name>
+                <desc>updates cit_show_hide_flag for Standard Catalog</desc>
+                <sp-name>STANDARD_FULL_WRAPPER.stg_mstr_cat_prod_filter</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="add_propagation_queue_full" type="SP">
+                <name>BE_STANDARD.add_event_propagation_queue</name>
+                <desc>Add custom catalog to prop queue</desc>
+                <sp-name>BE_STANDARD.add_event_propagation_queue</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="stg_src_fusion_changes" type="SP">
+                <name>BE_FUSION_ORDERABILITY.propagate_all_changes_incr</name>
+                <desc>Add custom catalog to prop queue</desc>
+                <sp-name>BE_FUSION_ORDERABILITY.propagate_all_changes_incr</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="stg_src_xsell_changes" type="SP">
+                <name>Be_Cross_Sell.stg_update_cs_master_incr</name>
+                <desc></desc>
+                <sp-name>Be_Cross_Sell.stg_update_cs_master_incr</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+
+
+        <stage id="Catalog_update_fusion_incr" type="SP">
+                <name>BE_FUSION_ORDERABILITY.propagate_all_changes_incr</name>
+                <desc>Add custom catalog to prop queue</desc>
+                <sp-name>BE_FUSION_ORDERABILITY.propagate_all_changes_incr</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="Catalog_assignprod_incr" type="SP">
+                <name>LOCALIZE_PRODUCT.ASSIGNLOCALPRODUCTS_INCR</name>
+                <desc>Add custom catalog to prop queue</desc>
+                <sp-name>LOCALIZE_PRODUCT.ASSIGNLOCALPRODUCTS_INCR</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+
+
+        <stage id="update_customer_full" type="SP">
+                <name>DEAL_FULL_WRAPPER.STG_UPDATE_CUSTOMER</name>
+                <desc>updates customer table, thru evf</desc>
+                <sp-name>DEAL_FULL_WRAPPER.STG_UPDATE_CUSTOMER</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+       <stage id="update_global_customer_full" type="SP">
+                <name>DEAL_FULL_WRAPPER.STG_UPDATE_GLOBAL_CUSTOMER</name>
+                <desc>updates global customer table</desc>
+                <sp-name>DEAL_FULL_WRAPPER.STG_UPDATE_GLOBAL_CUSTOMER</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="update_ncrf_customer_full" type="SP">
+		<name>DEAL_FULL_WRAPPER.stg_update_ncrf_customer</name>
+		<desc>Deal propagation to create customer based on NCRF IDs</desc>
+		<sp-name>DEAL_FULL_WRAPPER.stg_update_ncrf_customer</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+
+        <stage id="update_deal_headers_full" type="SP">
+                <name>DEAL_FULL_WRAPPER.STG_UPDATE_DEAL_HEADERS</name>
+                <desc>updates headers for new catalog table</desc>
+                <sp-name>DEAL_FULL_WRAPPER.STG_UPDATE_DEAL_HEADERS</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="stg_replace_deal_full" type="SP">
+                <name>DEAL_FULL_WRAPPER.stg_replace_deal</name>
+                <desc>Replaces the original deal</desc>
+                <sp-name>DEAL_FULL_WRAPPER.stg_replace_deal</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="stg_sales_bdl_auto_creation_full" type="SP">
+                <name>DEAL_FULL_WRAPPER.stg_sales_bdl_auto_creation </name>
+                <desc>auto creation/updation of sales bundle templates for the deal</desc>
+                <sp-name>DEAL_FULL_WRAPPER.stg_sales_bdl_auto_creation</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="stg_delete_prods_full" type="SP">
+                <name>DEAL_FULL_WRAPPER.stg_del_prods</name>
+                <desc>deletes products from all-deal and prop_deal </desc>
+                <sp-name>DEAL_FULL_WRAPPER.stg_del_prods</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+        <stage id="promo_bundle_instance" type="SP">
+                <name>BE_BUNDLE_PRS.PROMO_BUNDLE_INSTANCE_STAGE</name>
+                <desc>, thru evf</desc>
+                <sp-name>BE_BUNDLE_PRS.PROMO_BUNDLE_INSTANCE_STAGE</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="publish_promo_catalog" type="SP">
+                <name>BE_BUNDLE_PRS.PUBLISH_PROMO_CATALOG_STAGE</name>
+                <desc>, thru evf</desc>
+                <sp-name>BE_BUNDLE_PRS.PUBLISH_PROMO_CATALOG_STAGE</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+       <stage id="stg_config_change" type="SP">
+                <name>BE_CUSTOM_CONFIG_DLC.ADD_OR_UPDATE_CUSTOM_CONFIG</name>
+                <desc>, thru evf</desc>
+                <sp-name>BE_CUSTOM_CONFIG_DLC.ADD_OR_UPDATE_CUSTOM_CONFIG</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+
+
+        <stage id="stg_gen_config_change" type="SP">
+                <name>BE_GENERIC_CONFIG_DLC.ADD_OR_UPDATE_GENERIC_CONFIG</name>
+                <desc>, thru evf</desc>
+                <sp-name>BE_GENERIC_CONFIG_DLC.ADD_OR_UPDATE_GENERIC_CONFIG</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+
+
+        <stage id="stg_src_plc_change" type="SP">
+                <name>BE_PLC_ORDERABILITY.PROPAGATE_SRC_CHANGES</name>
+                <desc>, thru evf</desc>
+                <sp-name>BE_PLC_ORDERABILITY.PROPAGATE_SRC_CHANGES</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+
+	<stage id="stg_validate_prods_for_price_src" type="SP">
+                <name>BE_PRICING.STG_VAL_PRODS_FOR_PRICE_SRC</name>
+                <desc>, thru evf</desc>
+                <sp-name>BE_PRICING.STG_VAL_PRODS_FOR_PRICE_SRC</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="stg_cat_bdl_off_price_val_src" type="SP">
+                <name>BE_BUNDLE_PRICE.STG_CAT_BDL_OFF_PRICE_VAL_SRC</name>
+                <desc>, thru evf</desc>
+                <sp-name>BE_BUNDLE_PRICE.STG_CAT_BDL_OFF_PRICE_VAL_SRC</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+
+
+
+        <stage id="stg_stdcat_val_prods_for_price_src" type="SP">
+                <name>BE_STANDARD.STG_STDCAT_VAL_PRODS_PRICE_SRC</name>
+                <desc>Price validation..</desc>
+                <sp-name>BE_STANDARD.STG_STDCAT_VAL_PRODS_PRICE_SRC</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="stg_cat_bdl_prof_price_val_src" type="SP">
+                <name>BE_BUNDLE_PRICE.STG_CAT_BDL_PROF_PRICE_VAL_SRC</name>
+                <desc>computes the header price and validate the bundles</desc>
+                <sp-name>BE_BUNDLE_PRICE.STG_CAT_BDL_PROF_PRICE_VAL_SRC</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+
+
+
+
+        <stage id="update_cat_item_price_full" type="SP">
+                <name>BE_PRICING.STG_CAT_ITEM_PRICE_INCR</name>
+                <desc>updates cat_item_price</desc>
+                <sp-name>BE_PRICING.STG_CAT_ITEM_PRICE_INCR</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+
+        </stage>
+
+	<stage id="cat_update_master_item" type="SP">
+                <name>BE_MASTER_ITEM.STG_CAT_UPDATE_MASTER_ITEM</name>
+                <desc>updates custom master catalog item</desc>
+                <sp-name>BE_MASTER_ITEM.STG_CAT_UPDATE_MASTER_ITEM</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="cat_update_master_psource" type="SP">
+                <name>BE_MASTER_ITEM.STG_CAT_UPDATE_MASTER_PSOURCE</name>
+                <desc>updates custom master catalog price source table</desc>
+                <sp-name>BE_MASTER_ITEM.STG_CAT_UPDATE_MASTER_PSOURCE</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="cat_stdcat_merge_and_price" type="SP">
+		<name>be_incr_general.stg_cat_stdcat_merge_price</name>
+		<desc>general catalog merge and pricing update </desc>
+		<sp-name>be_incr_general.stg_cat_stdcat_merge_price</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+  	</stage>
+
+
+	<stage id="cat_update_rate_conversion" type="SP">
+                <name>CAT_RATE_CONVERSION.CAT_INCR_RATE_POPAGATION</name>
+                <desc>updates reseller margin in cat_item_price</desc>
+                <sp-name>CAT_RATE_CONVERSION.CAT_INCR_RATE_POPAGATION</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="update_catalog_cnt_src_incr" type="SP">
+	       <name>CNT_CACHE.update_catalog_cnt_src_incr</name>
+		<desc>updates catalog content for source content updates</desc>
+	        <sp-name>CNT_CACHE.update_catalog_cnt_src_incr</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="update_gen_catalog" type="SP">
+		<name>Be_CasBuy_Reg_Load.stg_update_gen_catalogs</name>
+		<desc>updates general catalog and puts the corresponding custom catalog to queue</desc>
+		<sp-name>Be_CasBuy_Reg_Load.stg_update_gen_catalogs</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="catalog_diff" type="SP">
+		<name>Be_Catalog_Diff.standalone_diff</name>
+		<desc>The catalog diff functionality used by eprime publish</desc>
+		<sp-name>Be_Catalog_Diff.standalone_diff</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_plc_orderability_incr" type="SP">
+		<name>Be_Plc_Orderability.validate_catalog_stg_incr</name>
+		<desc>updates cat_item_options table with plc orderability info for catalog incremental propagation</desc>
+		<sp-name>Be_Plc_Orderability.validate_catalog_stg_incr</sp-name>
+		<sp-param-id>eventid</sp-param-id>
+	</stage>
+
+	<stage id="update_master_options_incr" type="SP">
+                <name>Be_Master_Item.stg_src_update_master_options</name>
+                <desc>updates master catalog options</desc>
+                <sp-name>Be_Master_Item.stg_src_update_master_options</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+	<stage id="stg_deal_incr_items" type="SP">
+	       <name>BE_DEAL.stg_deal_incr_items</name>
+	       <desc>Add the modified prods to the cat_incr_prop for Vista catalog.</desc>
+	       <sp-name>BE_DEAL.stg_deal_incr_items</sp-name>
+	       <sp-param-id>eventid</sp-param-id>
+	</stage>
+
+        <stage id="cleanUp_cat_incr_prop" type="SP">
+	       <name>Be_Incr_General.Stg_CleanUp_Cat_Incr_Prop</name>
+	       <desc>clean up cat_incr_prop table</desc>
+	       <sp-name>Be_Incr_General.Stg_CleanUp_Cat_Incr_Prop</sp-name>
+	       <sp-param-id>eventid</sp-param-id>
+	</stage>
+	
+	
+	<workflow id="CUSTOM_FULL" skip-check="TRUE">
+		<stage id="update_master_item_full"/>
+		<stage id="update_master_psource_full"/>
+		<stage id="update_rate_conversion_full"/>
+		<stage id="stdcat_merge_and_price_full"/>		
+		<stage id="update_cat_zone_charge_full"/>
+		<stage id="stg_register_master_with_prs_full"/>
+		<stage id="update_master_options_full"/>
+		<stage id="update_fusion_orderability_full"/>
+		<stage id="update_plc_orderability_full"/>
+		<stage id="update_cross_sell_item_full"/>		
+		<stage id="update_xsell_zone_charge_full"/>
+		<stage id="update_catalog_item_full"/>
+		<stage id="update_catalog_options_full"/>
+		<stage id="update_content_full"/>
+		<stage id="master_rdd_full"/>
+		<stage id="stg_update_sales_bundle_full"/>
+		<stage id="stg_update_catalog_bundle_full"/>
+		<stage id="stg_update_bundle_price_full"/>
+		<stage id="stg_update_bundle_long_desc_full"/>
+		<stage id="bundle_alert_full"/>
+		<stage id="stg_update_bndl_fusn_ord_stat_full"/>
+		<stage id="upd_cat_item_prod_mass_removal_full"/>
+		<stage id ="check_ctg_delete_full"/>
+		<stage id="del_obs_prod_full"/>
+		<stage id="mvc_pub_load_pub_queue_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="cleanUp_cat_incr_prop"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+
+	<workflow id="VISTA_FULL" skip-check="TRUE">
+		<stage id="update_master_item_full"/>
+		<stage id="update_master_psource_full"/>
+		<stage id="update_rate_conversion_full"/>
+		<stage id="stdcat_merge_and_price_full"/>		
+		<stage id="update_cat_zone_charge_full"/>
+		<stage id="stg_register_master_with_prs_full"/>
+		<stage id="update_master_options_full"/>
+		<stage id="update_fusion_orderability_full"/>
+		<stage id="update_plc_orderability_full"/>
+		<stage id="update_cross_sell_item_full"/>		
+		<stage id="update_xsell_zone_charge_full"/>
+		<stage id="update_catalog_item_full"/>
+		<stage id="update_catalog_options_full"/>
+		<stage id="update_content_full"/>
+		<stage id="master_rdd_full"/>
+		<stage id="stg_update_sales_bundle_full"/>
+		<stage id="stg_update_catalog_bundle_full"/>
+		<stage id="stg_update_bundle_price_full"/>
+		<stage id="stg_update_bundle_long_desc_full"/>
+		<stage id="bundle_alert_full"/>
+		<stage id="stg_update_bndl_fusn_ord_stat_full"/>
+		<stage id="upd_cat_item_prod_mass_removal_full"/>
+		<stage id ="check_ctg_delete_full"/>
+		<stage id="del_obs_prod_full"/>
+		<stage id="mvc_pub_load_pub_queue_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="cleanUp_cat_incr_prop"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="STANDARD_FULL" skip-check="TRUE">
+		<stage id="propagate_cat_item_full"/>
+		<stage id="propagate_item_price_source_full"/>
+		<stage id="update_rate_conversion_full"/>
+		<stage id="stg_merge_price_for_stdcat_full"/>
+		<stage id="propagate_cat_item_price_full"/>
+		<stage id="propagate_cat_item_options_full"/>
+		<stage id="update_fusion_orderability_full"/>
+		<stage id="update_plc_orderability_full"/>
+		<stage id="update_product_status_full"/>
+		<stage id="stg_update_bundle_price_full"/>
+		<stage id="stg_update_bundle_long_desc_full"/>
+		<stage id="bundle_alert_full"/>
+		<stage id="update_hide_flag_full"/>
+		<stage id="add_propagation_queue_full"/>
+	</workflow>
+
+
+	<workflow id="CATALOG_FUSION_ORDERABILITY" skip-check="TRUE">
+		<stage id="stg_src_fusion_changes"/>
+		<stage id="mvc_pub_load_pub_queue_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+
+	<workflow id="CATALOG_XSELL" skip-check="TRUE">
+		<stage id="stg_src_xsell_changes"/>
+		<stage id="mvc_pub_load_pub_queue_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_XSELL_FULL" skip-check="TRUE">
+		<stage id="update_cross_sell_item_full"/>		
+		<stage id="update_xsell_zone_charge_full"/>
+		<stage id="mvc_pub_load_pub_queue_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_SLA" skip-check="TRUE">
+		<stage id="stg_src_sla_changes"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+
+	<!-- Verify the GUI Upload workflows to map with framework -->
+	<workflow id="STD_CATALOG_UPLOAD" skip-check="TRUE">
+		<stage id="stg_catalog_upload_incr"/>
+	</workflow>
+
+	<workflow id="CATALOG_BDL_UPLOAD" skip-check="TRUE">
+		<stage id="stg_catalog_upload_bundle_incr"/>
+	</workflow>
+
+
+	<workflow id="CATALOG_3PO_UPLOAD" skip-check="TRUE">
+		<stage id="stg_catalog_fe_upload_3po_incr"/>
+	</workflow>
+
+
+
+	<workflow id="STD_CATALOG_3PO_UPLOAD" skip-check="TRUE">
+		<stage id="stg_catalog_fe_std_upload_incr"/>
+	</workflow>
+	<!-- Verify the GUI Upload workflows to map with framework -->
+
+
+
+	<workflow id="DEAL_FULL" skip-check="TRUE">
+		<stage id="update_customer_full"/>
+		<stage id="update_global_customer_full"/>
+		<stage id="update_ncrf_customer_full"/>
+		<stage id="update_deal_headers_full"/>
+		<stage id="stg_replace_deal_full"/>
+		<stage id="stg_sales_bdl_auto_creation_full"/>
+		<stage id="stg_deal_incr_items"/>
+		<stage id="stg_create_events_for_new_deal"/>
+		<stage id="stg_delete_prods_full"/>
+	</workflow>
+
+	<workflow id="DEAL_PRICE" skip-check="TRUE">
+		<stage id="update_customer_full"/>
+		<stage id="update_global_customer_full"/>
+		<stage id="update_ncrf_customer_full"/>
+		<stage id="update_deal_headers_full"/>
+		<stage id="stg_replace_deal_full"/>
+		<stage id="stg_sales_bdl_auto_creation_full"/>
+		<stage id="stg_create_events_for_new_deal_price"/>
+		<stage id="stg_delete_prods_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_PRS_PROMO" skip-check="TRUE">
+		<stage id="promo_bundle_instance"/>
+		<stage id="publish_promo_catalog"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_CONFIG_CHANGE" skip-check="TRUE">
+		<stage id="stg_config_change"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+
+	<workflow id="CATALOG_GEN_CONFIG_CHANGE" skip-check="TRUE">
+		<stage id="stg_gen_config_change"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+
+	<workflow id="CATALOG_PLC_STATUS" skip-check="TRUE">
+		<stage id="stg_src_plc_change"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+<!-- this workflow is splited to two workflows 8/31/2009
+	<workflow id="CATALOG_VAL_PRICE_FULL" skip-check="TRUE">
+		<stage id="stg_validate_prods_for_price_src"/>
+		<stage id="stg_cat_bdl_off_price_val_src"/>
+		<stage id="stg_src_xsell_changes"/>
+		<stage id="update_catalog_options_full"/>
+		<stage id="stg_add_child_missing_ctc"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+-->
+
+ 	<workflow id="CATALOG_VAL_PRICE_FULL" skip-check="TRUE">
+		<stage id="stg_validate_prods_for_price_src"/>
+		<stage id="stg_cat_bdl_off_price_val_src"/>
+		<stage id="update_catalog_options_full"/>
+		<stage id="stg_add_child_missing_ctc"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+	     
+	<workflow id="CATALOG_VAL_PRICE_XSELL_FULL" skip-check="TRUE"> 
+		<stage id="stg_src_xsell_changes"/> 
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+
+	<workflow id="STD_CATALOG_VAL_PRICE_FULL" skip-check="TRUE">
+		<stage id="stg_stdcat_val_prods_for_price_src"/>
+		<stage id="stg_cat_bdl_prof_price_val_src"/>
+		<stage id="publish_standard_catalog"/>
+	</workflow>
+
+	<!-- Exchange rate workflow for chianti Start -->
+	<workflow id="EXCH_FULL" skip-check="TRUE">
+		<stage id="update_rate_conversion_full"/>		
+	        <stage id="update_cat_zone_charge_full"/>		
+		<stage id="update_cat_item_price_full"/>
+		<stage id="stg_update_bundle_price_full"/>
+		<stage id="stg_update_bndl_fusn_ord_stat_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+	<!-- Exchange rate workflow for chianti End -->
+
+	<workflow id="X_SELL_FULL" skip-check="TRUE">
+		<stage id="update_cross_sell_item_full"/>		
+		<stage id="update_xsell_zone_charge_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_PROD_INCR" skip-check="TRUE">
+		<stage id="cat_update_master_item"/>
+		<stage id="cat_update_master_psource"/>
+		<stage id="cat_update_rate_conversion"/>
+		<stage id="cat_stdcat_merge_and_price"/>
+		<stage id="stg_register_master_with_prs_full"/>
+		<stage id="incr_update_master_options"/>
+		<stage id="update_fusion_orderability_full"/>
+		<stage id="update_plc_orderability_incr"/>
+		<stage id="incr_update_catalog_item"/>
+		<stage id="incr_update_catalog_options"/>
+		<stage id="incr_update_content"/>
+		<stage id="stg_update_sales_bundle_full"/>
+		<stage id="stg_update_catalog_bundle_full"/>
+		<stage id="stg_update_bundle_price_full"/>
+		<stage id="stg_update_bundle_long_desc_full"/>
+		<stage id="bundle_alert_full"/>
+		<stage id ="check_ctg_delete_full"/>
+		<stage id="del_obs_prod_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="cleanUp_cat_incr_prop"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_PRICE_INCR" skip-check="TRUE">
+		<stage id="cat_update_master_item"/>
+		<stage id="cat_update_master_psource"/>
+		<stage id="cat_update_rate_conversion"/>
+		<stage id="cat_stdcat_merge_and_price"/>
+		<stage id="stg_register_master_with_prs_full"/>
+		<stage id="update_cat_zone_charge_full"/>
+		<stage id="update_cross_sell_item_full"/>		
+		<stage id="update_xsell_zone_charge_full"/>
+		<stage id="stg_update_bundle_price_full"/>
+		<stage id="update_catalog_item_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="cleanUp_cat_incr_prop"/>
+		<stage id="load_pub_queue_full"/>
+		<stage id="mvc_pub_load_pub_queue_full"/>
+	</workflow>
+
+       	<workflow id="CATALOG_CONTENT_UPDATE" skip-check="TRUE">
+	    <stage id="update_catalog_cnt_src_incr"/>
+	    <stage id="catalog_diff"/>
+	    <stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_CONTENT_UPDATE_NO_PUB" skip-check="TRUE">
+		<stage id="update_catalog_cnt_src_incr"/> 
+		<stage id="catalog_diff"/>
+	</workflow>
+
+	<workflow id="CATALOG_PATSY_DISCOUNT" skip-check="TRUE">
+	    <stage id="stg_patsy_discount"/>
+	    <stage id="stdcat_merge_and_price_full"/>
+	    <stage id="stg_update_bundle_price_full"/>
+	    <stage id="del_obs_prices"/>
+	    <stage id="catalog_diff"/>
+	    <stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_PLC_STATUS_FULL" skip-check="TRUE">
+	    <stage id="update_plc_orderability_full"/>
+	    <stage id="update_cat_valid_status_full"/>
+	    <stage id="catalog_diff"/>
+	    <stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="GENERIC_CFG_REPLACE" skip-check="TRUE">
+		  <stage id="stg_generic_cfg_replace"/>
+		  <stage id="catalog_diff"/>
+	    	  <stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="GENERIC_CFG_DESC_UPDATE" skip-check="TRUE">
+	  <stage id="stg_generic_cfg_desc_update"/>
+	  <stage id="catalog_diff"/>
+	  <stage id="load_pub_queue_full"/>
+	</workflow>
+
+        <workflow id="GEN_CATALOG_INCR" skip-check="TRUE">
+	   <stage id="update_gen_catalog"/>
+	</workflow>
+
+	<workflow id="CUSTOM_FULL_LOAD" skip-check="TRUE">
+	    <stage id="update_master_item_full"/>
+	    <stage id="update_master_psource_full"/>
+	    <stage id="update_rate_conversion_full"/>
+	    <stage id="stdcat_merge_and_price_full"/>	    
+	    <stage id="stg_register_master_with_prs_full"/>
+	    <stage id="update_cat_zone_charge_full"/>
+	    <stage id="update_master_options_full"/>
+	    <stage id="update_fusion_orderability_full"/>
+	    <stage id="update_plc_orderability_full"/>
+	    <stage id="update_cross_sell_item_full"/>	    
+	    <stage id="update_xsell_zone_charge_full"/>
+	    <stage id="update_catalog_item_full"/>
+	    <stage id="update_catalog_options_full"/>
+	    <stage id="update_content_full"/>
+	    <stage id="master_rdd_full"/>
+	    <stage id="stg_update_sales_bundle_full"/>
+	    <stage id="stg_update_catalog_bundle_full"/>
+	    <stage id="stg_update_bundle_price_full"/>
+	    <stage id="stg_update_bundle_long_desc_full"/>
+	    <stage id="bundle_alert_full"/>
+	    <stage id="stg_update_bndl_fusn_ord_stat_full"/>
+	    <stage id="upd_cat_item_prod_mass_removal_full"/>
+	    <stage id="del_obs_prod_full"/>
+	    <stage id="mvc_pub_load_pub_queue_full"/>
+	    <stage id="catalog_diff"/>
+	    <stage id="load_pub_queue_full"/>
+        </workflow>
+
+        <workflow id="DEAL_FULL_LOAD" skip-check="TRUE">
+		<stage id="update_customer_full"/>
+		<stage id="update_global_customer_full"/>
+		<stage id="update_ncrf_customer_full"/>
+		<stage id="update_deal_headers_full"/>
+		<stage id="stg_replace_deal_full"/>
+		<stage id="stg_sales_bdl_auto_creation_full"/>
+		<stage id="stg_create_events_for_full_load"/>
+		<stage id="stg_delete_prods_full"/>
+	</workflow>
+
+	<workflow id="CUSTOM_PRICE" skip-check="TRUE">
+	       <stage id="update_master_psource_full"/>
+	       <stage id="update_rate_conversion_full"/>
+	       <stage id="stdcat_merge_and_price_full"/>
+	       <stage id="stg_register_master_with_prs_full"/>
+	       <stage id="update_master_options_full"/>       
+               <stage id="update_cat_zone_charge_full"/>
+	       <stage id="update_cross_sell_item_full"/>	       
+	       <stage id="update_xsell_zone_charge_full"/>
+	       <stage id="update_catalog_item_full"/>
+               <stage id="update_catalog_options_full"/>	       
+	       <stage id="stg_update_bundle_price_full"/>
+	       <stage id="bundle_alert_full"/>
+	       <stage id="stg_update_bndl_fusn_ord_stat_full"/>
+	       <stage id="load_pub_queue_full"/>
+	       <stage id="mvc_pub_load_pub_queue_full"/>
+       </workflow>
+
+	<workflow id="VISTA_INCR" skip-check="TRUE">
+		<stage id="cat_update_master_item"/>
+		<stage id="cat_update_master_psource"/>
+		<stage id="cat_update_rate_conversion"/>
+		<stage id="cat_stdcat_merge_and_price"/>
+		<stage id="stg_register_master_with_prs_full"/>
+		<stage id="incr_update_master_options"/>
+		<stage id="update_fusion_orderability_full"/>
+		<stage id="update_plc_orderability_incr"/>
+		<stage id="incr_update_catalog_item"/>
+		<stage id="incr_update_catalog_options"/>
+		<stage id="incr_update_content"/>
+		<stage id="stg_update_sales_bundle_full"/>
+		<stage id="stg_update_catalog_bundle_full"/>
+		<stage id="stg_update_bundle_price_full"/>
+		<stage id="stg_update_bundle_long_desc_full"/>
+		<stage id="bundle_alert_full"/>
+		<stage id ="check_ctg_delete_full"/>
+		<stage id="del_obs_prod_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="cleanUp_cat_incr_prop"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+
+	<workflow id="CATALOG_OPTIONS_INCR" skip-check="TRUE">
+		<stage id="cat_update_master_item"/>
+		<stage id="cat_update_master_psource"/>
+		<stage id="cat_update_rate_conversion"/>
+		<stage id="cat_stdcat_merge_and_price"/>
+		<stage id="stg_register_master_with_prs_full"/>
+		<stage id="update_master_options_incr"/>
+		<stage id="update_fusion_orderability_full"/>
+		<stage id="update_plc_orderability_incr"/>
+		<stage id="incr_update_catalog_item"/>
+		<stage id="incr_update_catalog_options"/>
+		<stage id="incr_update_content"/>
+		<stage id="stg_update_sales_bundle_full"/>
+		<stage id="stg_update_catalog_bundle_full"/>
+		<stage id="stg_update_bundle_price_full"/>
+		<stage id="stg_update_bundle_long_desc_full"/>
+		<stage id="bundle_alert_full"/>
+		<stage id ="check_ctg_delete_full"/>
+		<stage id="del_obs_prod_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="cleanUp_cat_incr_prop"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+	
+	<workflow id="CAT_FUSION_ORDERABILITY_FULL" skip-check="TRUE">
+		<stage id="update_fusion_orderability_full"/>
+		<stage id="stg_update_bndl_fusn_ord_stat_full"/>		
+		<stage id="mvc_pub_load_pub_queue_full"/>
+		<stage id="catalog_diff"/>
+		<stage id="load_pub_queue_full"/>
+	</workflow>
+<!-- added for expiry refresh events -->
+        <stage id="refresh_custom_pricing" type="SP">
+                <name>expiry_refresh.refresh_custom_pricing_new</name>
+                <desc>Master Catalogs Products Price has been changed and those have price expired products</desc>
+                <sp-name>expiry_refresh.refresh_custom_pricing_new</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="enable_custom_pricing" type="SP">
+                <name>expiry_refresh.enable_custom_pricing_new</name>
+                <desc>expiry_refresh.enable_custom_pricing_new</desc>
+                <sp-name>expiry_refresh.enable_custom_pricing_new</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>
+
+        <stage id="refresh_expired_configs" type="SP">
+                <name>expiry_refresh.refresh_expired_configs_new</name>
+                <desc>expiry_refresh.refresh_expired_configs_new</desc>
+                <sp-name>expiry_refresh.refresh_expired_configs_new</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage> 
+        
+        <stage id="validate_comcat_bundles_new" type="SP">
+                <name>expiry_refresh.validate_comcat_bundles_new</name>
+                <desc>expiry_refresh.validate_comcat_bundles_new</desc>
+                <sp-name>expiry_refresh.validate_comcat_bundles_new</sp-name>
+                <sp-param-id>eventid</sp-param-id>
+        </stage>  
+
+        
+	<workflow id="PRICE_EXPIRY" skip-check="TRUE">
+		<stage id="refresh_custom_pricing"/>
+	</workflow>
+  
+  <workflow id="ENABLE_PRICE" skip-check="TRUE">
+		<stage id="enable_custom_pricing"/>
+	</workflow> 
+  
+  <workflow id="CONFIG_EXPIRY" skip-check="TRUE">
+		<stage id="refresh_expired_configs"/>
+	</workflow>  
+	
+	 <workflow id="BUNDLE_REVALIDATION" skip-check="TRUE">
+		<stage id="validate_comcat_bundles_new"/>
+	</workflow>  
+
+<!--end  expiry refresh events -->
+
+<!-- Event based propagation changes End-->
+
+
+
+
+
+
+</comcat-be-stage>

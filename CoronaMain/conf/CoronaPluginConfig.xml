@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<processtypes id="PROCESS_TYPE_MAPPINGS">
+		<!-- Sagar's process type -->
+		<processtype id= "CONFIG_DESC_UPDATE" plugin_type="internal">
+			<daomethod_identified>ConfigDescUpdate</daomethod_identified>
+			<transformation_classes>
+					<class name="com.hp.psg.corona.propagation.cto.handler.impl.CtoDescPropagation">
+						<mappingobj>
+							<parent>com.hp.psg.corona.common.cto.beans.ConfigHeaderInfo</parent>
+							<child>com.hp.psg.corona.common.cto.beans.ConfigComponentInfo</child>
+							<bindingkey>bundleId|shipToCountry</bindingkey>
+							<delim>|</delim>
+						</mappingobj>
+						<mappingobj>
+							<parent>com.hp.psg.corona.common.cto.beans.ConfigComponentInfo</parent>
+							<child>com.hp.psg.corona.common.cto.beans.ProductDescription</child>
+							<bindingkey>productId</bindingkey>
+							<delim>|</delim>
+						</mappingobj>
+						<mappingobj>
+							<parent>com.hp.psg.corona.common.cto.beans.ConfigHeaderInfo</parent>
+							<child>com.hp.psg.corona.common.cto.beans.ConfigDescription</child>
+							<bindingkey>bundleId|shipToCountry</bindingkey>
+							<delim>|</delim>
+						</mappingobj>
+					</class>
+			</transformation_classes>
+		</processtype>
+		<!-- Sagar's process type -->
+		<processtype id= "CONFIG_PERM_UPDATE" plugin_type="internal">
+			<daomethod_identified>ConfigPermUpdate</daomethod_identified>
+			<transformation_classes>
+					<class name="com.hp.psg.corona.propagation.cto.handler.impl.PermutationInfoPropagation">
+						<mappingobj>
+							<parent>com.hp.psg.corona.common.cto.beans.ConfigPermutationInfo</parent>
+							<child>com.hp.psg.corona.common.cto.beans.ConfigHeaderInfo</child>
+							<bindingkey>bundleId|shipToCountry</bindingkey>
+							<delim>|</delim>
+						</mappingobj>
+						<mappingobj>
+							<parent>com.hp.psg.corona.common.cto.beans.ConfigPermutationInfo</parent>
+							<child>com.hp.psg.corona.common.cto.beans.ConfigPermutationPriceInfo</child>
+							<bindingkey>bundleId|shipToCountry|priceId|priceDescriptor</bindingkey>
+							<delim>|</delim>
+						</mappingobj>
+					</class>
+			</transformation_classes>
+		</processtype>
+		<!-- Sandeep's process type -->
+		<processtype id= "CONFIG_CNTRY_UPDATE" plugin_type="internal">
+			<daomethod_identified>ConfigCntryUpdate</daomethod_identified>
+			<transformation_classes>
+					<class name="com.hp.psg.corona.propagation.cto.handler.impl.CtoConfPermPropagation"/>
+			</transformation_classes>
+		</processtype>
+
+<!--	
+		<processtype id= "CONFIG_PERM_PRICE_UPDATE" plugin_type="internal">
+			<daomethod_identified>ConfigPermPriceUpdate</daomethod_identified>
+		</processtype>
+-->
+		<processtype id= "CONFIG_PRICE_UPDATE" plugin_type="internal">
+			<!-- Seema's process type -->
+			<daomethod_identified>ConfigPriceUpdate</daomethod_identified>
+			<transformation_classes>
+				  <class name="com.hp.psg.corona.propagation.cto.handler.impl.CtoPricePropogation">
+						<mappingobj>
+							  <parent>com.hp.psg.corona.common.cto.beans.ConfigHeaderInfo</parent>
+							  <child>com.hp.psg.corona.common.cto.beans.ConfigComponentInfo</child>
+							  <bindingkey>bundleId|shipToCountry</bindingkey>
+							  <delim>|</delim>
+						</mappingobj>
+						<mappingobj>
+							  <parent>com.hp.psg.corona.common.cto.beans.ConfigHeaderInfo</parent>
+							  <child>com.hp.psg.corona.common.cto.beans.ConfigPermutationInfo</child>
+							  <bindingkey>bundleId|shipToCountry</bindingkey>
+							  <delim>|</delim>
+						</mappingobj>
+						<mappingobj>
+							  <parent>com.hp.psg.corona.common.cto.beans.ConfigPermutationInfo</parent>
+							  <child>com.hp.psg.corona.common.cto.beans.ConfigPriceHeaderInfo</child>
+							  <bindingkey>bundleId|shipToCountry|priceId|priceDescriptor</bindingkey>
+							  <delim>|</delim>
+						</mappingobj>
+						<mappinglistonkeys>
+							  <object>com.hp.psg.corona.common.cto.beans.PriceInfo</object>
+							  <bindingkey>bundleId|shipToCountry|priceId|priceDescriptor|productId</bindingkey>
+							  <delim>|</delim>
+						</mappinglistonkeys>
+					</class>
+			</transformation_classes>
+		</processtype>
+
+		<processtype id= "CONFIG_PERM_PRICE_UPDATE" plugin_type="internal">
+			<!-- Seema's process type -->
+			<daomethod_identified>ConfigPermPriceUpdate</daomethod_identified>
+			<transformation_classes>
+				  <class name="com.hp.psg.corona.propagation.cto.handler.impl.CtoNetPricePropogation">
+					<!-- these parameters are used for prepareBean method call for setting the transformation object before starting transformation -->
+					    <construct_args>
+							<var name="offsetStr" value="1" type="Integer"/>
+							<var name="dateObjStr" value="com.hp.psg.corona.propagation.handler.util.CalculateDateForCtoNetProp" type="Class"/>
+					    </construct_args>
+
+						<mappingobj>
+							  <parent>com.hp.psg.corona.common.cto.beans.ConfigHeaderInfo</parent>
+							  <child>com.hp.psg.corona.common.cto.beans.ConfigPriceHeaderInfo</child>
+							  <bindingkey>bundleId|shipToCountry</bindingkey>
+							  <delim>|</delim>
+						</mappingobj>
+						<mappingobj>
+							  <parent>com.hp.psg.corona.common.cto.beans.ConfigPriceHeaderInfo</parent>
+							  <child>com.hp.psg.corona.common.cto.beans.PriceInfo</child>
+							  <bindingkey>bundleId|shipToCountry|priceId|priceDescriptor</bindingkey>
+							  <delim>|</delim>
+						</mappingobj>	
+					</class>
+			</transformation_classes>
+		</processtype>			
+		<processtype id= "CONFIG_CNTRY" plugin_type="internal">
+			<daomethod_identified>ConfigCntryDataChange</daomethod_identified>
+		</processtype>
+		<processtype id= "CONFIG_PERMUTATION" plugin_type="internal">
+			<daomethod_identified>ConfigPermDataChange</daomethod_identified>
+		</processtype>
+		<processtype id= "CONFIG_PRICE" plugin_type="internal">
+			<daomethod_identified>ConfigPriceDataChange</daomethod_identified>
+		</processtype>
+		<processtype id= "PRODUCT_DESC" plugin_type="internal"> 
+			<daomethod_identified>ProductDescDataChange</daomethod_identified>
+		</processtype>
+
+
+		<processtype id= "CONFIG_PERM_PRICE_FUTURE" plugin_type="internal">
+			<!-- Seema's process type -->
+			<daomethod_identified>ConfigPermPriceUpdate</daomethod_identified>
+			<transformation_classes>
+				  <class name="com.hp.psg.corona.propagation.cto.handler.impl.CtoNetPricePropogation">
+					<!-- these parameters are used for prepareBean method call for setting the transformation object before starting transformation -->
+					    <construct_args>
+							<var name="offsetStr" value="1" type="Integer"/>
+							<var name="dateObjStr" value="com.hp.psg.corona.propagation.handler.util.CalculateDateForCtoNetPropFuture" type="Class"/>
+					    </construct_args>
+
+						<mappingobj>
+							  <parent>com.hp.psg.corona.common.cto.beans.ConfigHeaderInfo</parent>
+							  <child>com.hp.psg.corona.common.cto.beans.ConfigPriceHeaderInfo</child>
+							  <bindingkey>bundleId|shipToCountry</bindingkey>
+							  <delim>|</delim>
+						</mappingobj>
+						<mappingobj>
+							  <parent>com.hp.psg.corona.common.cto.beans.ConfigPriceHeaderInfo</parent>
+							  <child>com.hp.psg.corona.common.cto.beans.PriceInfo</child>
+							  <bindingkey>bundleId|shipToCountry|priceId|priceDescriptor</bindingkey>
+							  <delim>|</delim>
+						</mappingobj>	
+					</class>
+			</transformation_classes>
+		</processtype>
+		
+		<processtype id= "LIST_PRICE_UPDATE" plugin_type="internal">
+			<daomethod_identified>ListPriceUpdate</daomethod_identified>
+		</processtype>
+		
+		<processtype id= "LIST_PRICE_ADD" plugin_type="internal">
+			<daomethod_identified>ListPriceAdd</daomethod_identified>
+		</processtype>		
+		
+		<processtype id= "LIST_PRICE_INSERT" plugin_type="internal">
+			<daomethod_identified>ListPriceInsert</daomethod_identified>
+		</processtype>		
+
+	</processtypes>
+
+
+	<node id="corona" type="plugin">
+		<txn_handler>
+			<call id= "Transformation">
+				<classes>
+					<class name="com.hp.psg.corona.datachange.cto.plugin.impl.ConfigPermutationInfoTransformPlugin"/>
+				</classes>
+			</call>
+		</txn_handler>
+	</node>
+	
+	<node id="PRS" type="plugin">
+		<txn_handler>
+			<call id= "Transformation" >
+				<classes>
+					<class name="com.hp.psg.corona.datachange.cto.plugin.impl.PriceInfoTransformPlugin"/>
+					<class name="com.hp.psg.corona.datachange.cto.plugin.impl.ConfigInfoTransformPlugin_SAX"/>
+				</classes>
+			</call>
+		</txn_handler>
+	</node>
+
+
+	<!-- This is for Replication id = "Source|Object" -->
+	<node id="IPCS|PRICE_CACHE" type="plugin">
+		<txn_handler>
+			<call id= "Replication" >
+				<classes>
+					<class name="com.hp.psg.corona.replication.cto.handler.plugin.dblink.PriceCacheReplicationImpl"/>
+				</classes>
+			</call>
+		</txn_handler>
+	</node>
+
+</list>

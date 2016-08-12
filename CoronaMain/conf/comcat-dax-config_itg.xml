@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<comcat-dax-config>
+  <connection-pool>
+    <class-name>com.hp.psg.common.db.dax.jdbc.DaxJdbcConnectionPool</class-name>
+    <drivers>oracle.jdbc.driver.OracleDriver</drivers>
+    <context id="default">
+      <maxconn>50</maxconn>
+		<url>jdbc:oracle:thin:@(DESCRIPTION=(SDU=32768)(enable=broken)(LOAD_BALANCE=yes)(ADDRESS=(PROTOCOL=TCP)(HOST=gcu21562.austin.hp.com)(PORT=1526))(CONNECT_DATA=(SERVICE_NAME=CRNAI)))</url>
+		<user>corona</user> 
+		<password>itgcor^app$121</password> 
+          <maxtry>5</maxtry>
+          <timeout>30000</timeout>
+	</context>
+    </connection-pool>
+</comcat-dax-config>

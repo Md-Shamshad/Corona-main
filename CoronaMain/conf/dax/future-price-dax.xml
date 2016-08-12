@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<comcat-dax-config>
+
+	<stmt-group id="FUTURE_PRICE_PROPAGATION">
+
+		<stmt id="VALID_FUTURE_PRICE_UPDATE">
+			
+			<![CDATA[
+				UPDATE CONFIG_PERMUTATION_INFO SET CPI_OVERALL_STATUS='V', 
+													CPI_OVERALL_EOL=(SELECT	CPPI_PRICE_END_DATE
+																		FROM CONFIG_PERMUTATION_PRICE_INFO
+																		WHERE CPPI_PRICE_ID = {?:priceId}
+																		AND CPPI_BUNDLE_ID = {?:bundleId}
+																		AND CPPI_SHIP_TO_COUNTRY = {?:shipToCountry}
+																		AND CPPI_PRICE_DESCRIPTOR = {?:priceDescriptor}
+																		AND CPPI_PRICE_START_DATE <= SYSDATE 
+																		AND TRUNC(CPPI_PRICE_END_DATE) >= TRUNC(SYSDATE)
+																		AND CPPI_PRICE_START_DATE > ( SELECT CPI_OVERALL_EOL FROM CONFIG_PERMUTATION_INFO
+																			WHERE CPI_PRICE_ID = {?:priceId}
+																			AND CPI_BUNDLE_ID = {?:bundleId}
+																			AND CPI_SHIP_TO_COUNTRY = {?:shipToCountry}
+																			AND CPI_PRICE_DESCRIPTOR = {?:priceDescriptor}
+																		)),
+													CPI_LAST_MODIFIED_DATE = SYSDATE, CPI_LAST_MODIFIED_BY = 'FUTURE_PRICING'
+				WHERE CPI_PRICE_ID = {?:priceId}
+				AND CPI_BUNDLE_ID = {?:bundleId}
+				AND CPI_SHIP_TO_COUNTRY = {?:shipToCountry}
+				AND CPI_PRICE_DESCRIPTOR = {?:priceDescriptor}
+			]]>
+
+		</stmt>
+
+		<stmt id="INVALID_FUTURE_PRICE_UPDATE">
+			
+			<![CDATA[
+				UPDATE CONFIG_PERMUTATION_INFO SET CPI_OVERALL_STATUS='I',
+				CPI_LAST_MODIFIED_DATE = SYSDATE, CPI_LAST_MODIFIED_BY = 'FUTURE_PRICING'
+				WHERE CPI_PRICE_ID = {?:priceId}
+				AND CPI_BUNDLE_ID = {?:bundleId}
+				AND CPI_SHIP_TO_COUNTRY = {?:shipToCountry}
+				AND CPI_PRICE_DESCRIPTOR = {?:priceDescriptor}
+			]]>
+
+		</stmt>
+
+	</stmt-group>
+
+</comcat-dax-config>

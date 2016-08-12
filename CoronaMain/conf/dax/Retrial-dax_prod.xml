@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+	<comcat-dax-config>
+		
+		<stmt-group id="RETRIAL_DATA_CHANGE_GROUP">
+		       <stmt id="RETRY_ERROR_EVENTS">
+				<![CDATA[
+					update /*+ index(data_change_event DCE_PROC_STATUS_IDX)*/ data_change_event set dce_processing_status='READY',
+					dce_retry_cnt=to_number(nvl(dce_retry_cnt,'0')+1),
+					dce_last_modified_by ={?:string2}
+					where dce_processing_status='ERROR'
+					and dce_event_skip_flag='N'
+					and to_number(nvl(dce_retry_cnt,'0'))<3
+					and dce_last_modified_date <(sysdate - 1/(2*24))
+					]]>
+			   </stmt>
+		       <stmt id="RETRY_HANGING_EVENTS">
+				<![CDATA[
+					update /*+ index(data_change_event DCE_PROC_STATUS_IDX)*/ data_change_event set dce_processing_status='READY'
+					where 1=2 and dce_processing_status in ('INPROGRESS')
+					and dce_event_skip_flag='N'
+					and dce_last_modified_date <(sysdate - 5/24)
+					]]>
+		       </stmt>
+
+		</stmt-group>
+
+		<stmt-group id="RETRIAL_PROP_EVENTS_GROUP">
+			   <stmt id="RETRY_ERROR_EVENTS">
+				<![CDATA[
+					update /*+ index(propagation_event pe_proc_status_idx) */ propagation_event set pe_processing_status='GROUPED',
+					pe_retry_cnt=to_number(nvl(pe_retry_cnt,'0')+1),
+					pe_last_modified_by ={?:string2}
+					where pe_processing_status='ERROR'
+					and pe_event_skip_flag='N'
+					and to_number(nvl(pe_retry_cnt,'0'))<3
+					and pe_last_modified_date <(sysdate - 1/(2*24))
+					]]>
+			   </stmt>
+		       <stmt id="RETRY_HANGING_EVENTS">
+				<![CDATA[
+					update /*+ index(t pe_proc_status_idx) */ propagation_event t set pe_processing_status='GROUPED'
+					where 1=2 and  pe_processing_status in ('INPROGRESS','QUEUED')
+					and pe_event_skip_flag='N'
+					and pe_last_modified_date <(sysdate - 5/24)
+					]]>
+		       </stmt>
+
+		</stmt-group>
+
+	</comcat-dax-config>

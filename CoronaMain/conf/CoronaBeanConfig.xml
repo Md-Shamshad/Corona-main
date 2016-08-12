@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<bean name="ConfigComponentInfo">
+		<keyfields>
+			<field name="id"/>
+			<field name="bundleId"/>
+			<field name="shipToCountry"/>
+			<field name="productId"/>
+			<field name="pl"/>
+			<field name="startingPointFlag"/>
+			<field name="qty"/>
+			<field name="createdDate"/>
+			<field name="createdBy"/>
+			<field name="lastModifiedDate"/>
+			<field name="lastModifiedBy"/>
+			<field name="updtFlag"/>
+			<field name="delFlag"/>
+			<field name="trnId"/>
+			<field name="srcTrnId"/>
+			<field name="action"/>
+		</keyfields>
+	</bean>
+	<bean name="ConfigDescription">
+		<keyfields>
+			<field name="id"/>
+			<field name="bundleId"/>
+			<field name="locale"/>
+			<field name="longDesc"/>
+			<field name="createdDate"/>
+			<field name="createdBy"/>
+			<field name="lastModifiedDate"/>
+			<field name="lastModifiedBy"/>
+			<field name="updtFlag"/>
+			<field name="deleteFlag"/>
+			<field name="trnId"/>
+			<field name="action"/>
+			<field name="shipToCountry"/>
+			<field name="srcTrnId"/>
+		</keyfields>
+	</bean>
+	<bean name="ConfigHeaderInfo">
+		<keyfields>
+			<field name="id"/>
+			<field name="bundleId"/>
+			<field name="shipToCountry"/>
+			<field name="baseProductId"/>
+			<field name="registerFlag"/>
+			<field name="configCntryEol"/>
+			<field name="kmatId"/>
+			<field name="validityStatus"/>
+			<field name="errorCode"/>
+			<field name="errorMsg"/>
+			<field name="createdDate"/>
+			<field name="createdBy"/>
+			<field name="lastModifiedDate"/>
+			<field name="lastModifiedBy"/>
+			<field name="updtFlag"/>
+			<field name="configDesc"/>
+			<field name="delFlag"/>
+			<field name="regionCode"/>
+			<field name="trnId"/>
+			<field name="srcTrnId"/>
+			<field name="action"/>
+		</keyfields>
+	</bean>
+	<bean name="ConfigPermutationInfo">
+		<keyfields>
+			<field name="id"/>
+			<field name="priceId"/>
+			<field name="bundleId"/>
+			<field name="shipToCountry"/>
+			<field name="priceDescriptor"/>
+			<field name="genericPriceFlag"/>
+			<field name="createdDate"/>
+			<field name="createdBy"/>
+			<field name="lastModifiedDate"/>
+			<field name="lastModifiedBy"/>
+			<field name="updtFlag"/>
+			<field name="priceProcedure"/>
+			<field name="delFlag"/>
+			<field name="overallStatus"/>
+			<field name="regionCode"/>
+			<field name="newPermFlag"/>
+			<field name="custKey"/>
+			<field name="overallEol"/>
+			<field name="priceIdType"/>
+			<field name="trnId"/>
+			<field name="srcTrnId"/>
+			<field name="action"/>
+			<field name="configProdId"/>
+		</keyfields>
+	</bean>
+	<bean name="ConfigPermutationPriceInfo">
+		<keyfields>
+			<field name="id"/>
+			<field name="priceId"/>
+			<field name="bundleId"/>
+			<field name="shipToCountry"/>
+			<field name="priceDescriptor"/>
+			<field name="priceStartDate"/>
+			<field name="priceEndDate"/>
+			<field name="netPrice"/>
+			<field name="updtFlag"/>
+			<field name="priceStatus"/>
+			<field name="delFlag"/>
+			<field name="priceErrMsg"/>
+			<field name="createdBy"/>
+			<field name="createdDate"/>
+			<field name="lastModifiedDate"/>
+			<field name="lastModifiedBy"/>
+			<field name="trnId"/>
+			<field name="srcTrnId"/>
+			<field name="action"/>
+		</keyfields>
+	</bean>
+	<bean name="CTODaxDataBeanGeneral">
+		<keyfields>
+			<field name="priceId"/>
+			<field name="bundleId"/>
+			<field name="shipToCountry"/>
+			<field name="priceDescriptor"/>
+			<field name="shipToGeo"/>
+			<field name="priceGeo"/>
+			<field name="currency"/>
+			<field name="incoTerm"/>
+			<field name="priceListType"/>
+			<field name="trnId"/>
+			<field name="srcEventId"/>
+		</keyfields>
+	</bean>
+	<bean name="DataChangeEvent">
+		<keyfields>
+			<field name="id"/>
+			<field name="trnId"/>
+			<field name="processKey"/>
+			<field name="source"/>
+			<field name="status"/>
+			<field name="startDate"/>
+			<field name="endDate"/>
+			<field name="priority"/>
+			<field name="retryCnt"/>
+			<field name="errCode"/>
+			<field name="errMsg"/>
+			<field name="createdDate"/>
+			<field name="createdDatetimestamp"/>
+			<field name="createdBy"/>
+			<field name="lastModifiedDate"/>
+			<field name="lastModifiedDatetimestamp"/>
+			<field name="lastModifiedBy"/>
+			<field name="processType"/>
+			<field name="comment"/>
+			<field name="processedBy"/>
+			<field name="eventSkipFlag"/>
+			<field name="groupId"/>
+		</keyfields>
+	</bean>
+	<bean name="PriceInfo">
+		<keyfields>
+			<field name="id"/>
+			<field name="cphiId"/>
+			<field name="recipient"/>
+			<field name="priceProcedure"/>
+			<field name="priceId"/>
+			<field name="productId"/>
+			<field name="productNumber"/>
+			<field name="productOptionCd"/>
+			<field name="bundleId"/>
+			<field name="shipToCountry"/>
+			<field name="priceDescriptor"/>
+		</keyfields>
+	</bean>
+	<bean name="ProductDescription">
+		<keyfields>
+			<field name="id"/>
+			<field name="productId"/>
+			<field name="locale"/>
+			<field name="shortDesc"/>
+			<field name="createdDate"/>
+			<field name="createdBy"/>
+			<field name="lastModifiedDate"/>
+			<field name="lastModifiedBy"/>
+			<field name="updtFlag"/>
+			<field name="shortDescSrc"/>
+			<field name="trnId"/>
+			<field name="srcTrnId"/>
+			<field name="action"/>
+		</keyfields>
+	</bean>
+	<bean name="PropagationEvent">
+		<keyfields>
+			<field name="id"/>
+			<field name="source"/>
+			<field name="srcEventId"/>
+			<field name="processKey"/>
+			<field name="processType"/>
+			<field name="groupObject1"/>
+		</keyfields>
+	</bean>
+	<bean name="ConfigPriceHeaderInfo">
+		<keyfields>
+			<field name="id"/>
+			<field name="priceId"/>
+			<field name="recipient"/>
+			<field name="priceProcedure"/>
+			<field name="bundleId"/>
+			<field name="shipToCountry"/>
+			<field name="priceDescriptor"/>
+			<field name="priceIdType"/>
+			<field name="srcTrnId"/>
+		</keyfields>
+	</bean>
+	<bean name="ConfigPriceReplication">
+		<keyfields>
+			<field name="id"/>
+			<field name="cphiLastModifiedDate"/>
+			<field name="groupId"/>
+			<field name="createdDate"/>
+			<field name="createdBy"/>
+			<field name="lastModifiedDate"/>
+			<field name="lastModifiedBy"/>
+		</keyfields>
+	</bean>
+	<bean name="PriceCacheDataBean">
+		<keyfields>
+			<field name="configIdStr"/>
+			<field name="priceId"/>
+			<field name="shipToCountry"/>
+			<field name="priceDescriptor"/>
+			<field name="materialId"/>
+			<field name="priceSource"/>
+			<field name="netPrice"/>
+			<field name="listPrice"/>
+			<field name="delFlag"/>
+		</keyfields>
+	</bean>
+</list>

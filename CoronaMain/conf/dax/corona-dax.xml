@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+	<comcat-dax-config>
+		<stmt-group id="DATA_CHANGE_FWK_GROUP">
+
+			<stmt id ="GET_DATA_CHANGE_EVENT">
+				select 
+				{id}:=dce.dce_id, 
+				{trnId}:=dce.DCE_TRN_ID,
+				{source}:=dce.DCE_SOURCE,
+				{processType}:=dce.DCE_PROCESS_TYPE,
+				{groupId}:=dce.dce_group_id, 
+				{priority}:=dce.dce_priority, 
+				{startDate}:=dce.DCE_START_DATE,
+				{endDate}:=dce.DCE_END_DATE,
+				{retryCnt}:=dce.DCE_RETRY_CNT,
+				{processKey}:=dce.dce_process_key, 
+				{status}:=dce.dce_processing_status, 
+				{createdDate}:=dce.dce_created_date, 
+				{createdDatetimestamp}:=to_char(dce.dce_created_date,'mm/dd/yyyy hh24:mi:ss'),
+				{createdBy}:=dce.dce_created_by, 
+				{lastModifiedDate}:=dce.dce_last_modified_date, 
+				{lastModifiedBy}:=dce.dce_last_modified_by
+				from DATA_CHANGE_EVENT dce where {sql}
+			</stmt>
+
+
+			<stmt id ="GET_DATA_CHANGE_EVENT_BY_ID">
+				select 
+				{id}:=dce.dce_id, 
+				{trnId}:=dce.DCE_TRN_ID,
+				{source}:=dce.DCE_SOURCE,
+				{processType}:=dce.DCE_PROCESS_TYPE,
+				{groupId}:=dce.dce_group_id, 
+				{priority}:=dce.dce_priority, 
+				{startDate}:=dce.DCE_START_DATE,
+				{endDate}:=dce.DCE_END_DATE,
+				{retryCnt}:=dce.DCE_RETRY_CNT,
+				{processKey}:=dce.dce_process_key, 
+				{status}:=dce.dce_processing_status, 
+				{createdDate}:=dce.dce_created_date, 
+				{createdDatetimestamp}:=to_char(dce.dce_created_date,'mm/dd/yyyy hh24:mi:ss'),
+				{createdBy}:=dce.dce_created_by, 
+				{lastModifiedDate}:=dce.dce_last_modified_date, 
+				{lastModifiedBy}:=dce.dce_last_modified_by
+				from DATA_CHANGE_EVENT dce where DCE_ID = {?:long1}
+			</stmt>
+
+		    <stmt id="DATA_CHANGE_EVENT_READY_TO_WAIT">
+		        		update /*+ index(dce DCE_PROC_STATUS_IDX)*/ data_change_event dce set 
+		       			dce.dce_processing_status='WAIT',
+		       			dce.dce_last_modified_date = SYSDATE,    
+		       			dce.dce_last_modified_by ={?:string1}
+		       		where dce.dce_processing_status = 'READY'
+		       		      	and exists (
+						select /*+ index(dce1 DCE_PROC_STATUS_IDX)*/ 1 from data_change_event dce1 where
+						        dce1.dce_process_key=dce.dce_process_key
+								and dce1.dce_processing_status in ('QUEUED', 'PICKED','INPROGRESS')
+								and dce1.dce_event_skip_flag='N'
+								and dce.dce_id != dce1.dce_id
+								and dce.dce_created_date >= dce1.dce_created_date
+					)
+					and dce.dce_event_skip_flag='N'
+		       </stmt>
+				<stmt id="DATA_CHANGE_EVENT_READY_TO_ERROR_WAIT">
+					update /*+ index(dce DCE_PROC_STATUS_IDX)*/ data_change_event dce set 
+						dce.dce_processing_status='ERROR_WAIT',
+						dce.dce_last_modified_date = SYSDATE,
+						dce.dce_last_modified_by ={?:string1}
+					where dce.dce_processing_status = 'READY' 
+					and dce.dce_event_skip_flag='N'
+				and exists (
+					select /*+ index(dce1 DCE_PROC_STATUS_IDX)*/  1 from data_change_event dce1 
+					where dce1.dce_process_key=dce.dce_process_key
+					and dce1.DCE_SOURCE=dce.DCE_SOURCE
+					and dce1.dce_processing_status = 'ERROR'
+					and dce1.dce_event_skip_flag='N'
+				)
+				</stmt>
+
+			<stmt id="DATA_CHANGE_EVENT_WAIT_TO_READY">
+		       		update /*+ index(dce DCE_PROC_STATUS_IDX)*/ data_change_event dce set 
+		       			dce.dce_processing_status= 'READY',
+		       			dce.dce_last_modified_date = SYSDATE,
+		       			dce.dce_last_modified_by ={?:string1}
+		       		where dce.dce_processing_status = 'WAIT' 
+		       		and not exists (
+					select  /*+ index(dce1 DCE_PROC_STATUS_IDX)*/ 1 from data_change_event dce1
+					where   dce1.dce_process_key=dce.dce_process_key
+						and dce1.DCE_SOURCE=dce.DCE_SOURCE
+						and dce1.dce_event_skip_flag='N'
+						and dce1.dce_processing_status in ('QUEUED','INPROGRESS')
+						)
+						and dce.dce_event_skip_flag='N'
+		       	</stmt>
+
+			<stmt id="DATA_CHANGE_EVENT_ERRWAIT_TO_READY">
+		       		update /*+ index(dce DCE_PROC_STATUS_IDX)*/ data_change_event dce set 
+		       			dce.dce_processing_status= 'READY',
+		       			dce.dce_last_modified_date = SYSDATE,
+		       			dce.dce_last_modified_by ={?:string1}
+		       		where dce.dce_processing_status = 'ERROR_WAIT'
+		       		and not exists (
+					select /*+ index(dce1 DCE_PROC_STATUS_IDX)*/  1 from data_change_event dce1
+					where   dce1.dce_process_key=dce.dce_process_key
+						and dce1.dce_event_skip_flag='N'
+						and dce1.DCE_SOURCE=dce.DCE_SOURCE
+						and dce1.dce_processing_status ='ERROR'
+						)
+						and dce.dce_event_skip_flag='N'
+		       	</stmt>				
+
+		       	<stmt id="DATA_CHANGE_EVENT_WAIT_TO_ERRWAIT">
+				update /*+ index(dce DCE_PROC_STATUS_IDX)*/ data_change_event dce set 
+					dce.dce_processing_status= 'ERROR_WAIT',
+					dce.dce_last_modified_date = SYSDATE,
+			        dce.dce_last_modified_by ={?:string1}
+			 	where dce.dce_processing_status = 'WAIT' 
+			       		and exists (
+						select /*+ index(dce1 DCE_PROC_STATUS_IDX)*/ 1 from data_change_event dce1
+					where   dce1.dce_process_key=dce.dce_process_key
+						and dce1.dce_event_skip_flag='N'
+						and dce1.dce_processing_status ='ERROR'
+					) and dce.dce_event_skip_flag='N'
+		       	</stmt>
+		       	
+			<stmt id="GET_DATA_CHANGE_EVENTS_BY_STATUS">
+		       	   <![CDATA[	
+				select /*+ index(dce DCE_PROC_STATUS_IDX)*/ 
+					{id}:=dce.dce_id, 
+					{trnId}:=dce.DCE_TRN_ID,
+					{source}:=dce.DCE_SOURCE,
+					{processType}:=dce.DCE_PROCESS_TYPE,
+					{groupId}:=dce.dce_group_id, 
+					{priority}:=dce.dce_priority, 
+					{processKey}:=dce.dce_process_key, 
+					{status}:=dce.dce_processing_status, 
+					{startDate}:=dce.DCE_START_DATE,
+					{endDate}:=dce.DCE_END_DATE,
+					{retryCnt}:=dce.DCE_RETRY_CNT,
+					{createdDate}:=dce.dce_created_date, 
+					{createdDatetimestamp}:=to_char(dce.dce_created_date,'mm/dd/yyyy hh24:mi:ss'),
+					{createdBy}:=dce.dce_created_by, 
+					{lastModifiedDate}:=dce.dce_last_modified_date, 
+					{lastModifiedBy}:=dce.dce_last_modified_by
+				from data_change_event dce 
+				where dce_processing_status={?:string1}
+				and dce.dce_event_skip_flag='N'
+				order by dce.dce_priority
+			   ]]>	
+			</stmt>	
+
+		       	<stmt id="GET_DATA_CHANGE_EVENTS_BY_STATUS_W_ID">
+				   <![CDATA[	
+					select  /*+ index(dce DCE_PROC_STATUS_IDX)*/
+						{id}:=dce.dce_id, 
+						{trnId}:=dce.DCE_TRN_ID,
+						{source}:=dce.DCE_SOURCE,
+						{processType}:=dce.DCE_PROCESS_TYPE,
+						{groupId}:=dce.dce_group_id, 
+						{priority}:=dce.dce_priority, 
+						{processKey}:=dce.dce_process_key, 
+						{status}:=dce.dce_processing_status, 
+						{startDate}:=dce.DCE_START_DATE,
+						{endDate}:=dce.DCE_END_DATE,
+						{retryCnt}:=dce.DCE_RETRY_CNT,
+						{createdDate}:=dce.dce_created_date, 
+						{createdDatetimestamp}:=to_char(dce.dce_created_date,'mm/dd/yyyy hh24:mi:ss'),
+						{createdBy}:=dce.dce_created_by, 
+						{lastModifiedDate}:=dce.dce_last_modified_date, 
+						{lastModifiedBy}:=dce.dce_last_modified_by
+					from data_change_event dce 
+					where dce_processing_status={?:string1}
+					and dce.dce_event_skip_flag='N'
+					and dce_last_modified_by={?:string2}
+					]]>	
+		       	</stmt>			       	
+
+			<stmt id="GET_ERR_DATA_CHANGE_EVENTS">
+		       	   <![CDATA[	
+				select  /*+ index(dce DCE_PROC_STATUS_IDX)*/
+					{id}:=dce.dce_id, 
+					{trnId}:=dce.DCE_TRN_ID,
+					{source}:=dce.DCE_SOURCE,
+					{processType}:=dce.DCE_PROCESS_TYPE,
+					{groupId}:=dce.dce_group_id, 
+					{priority}:=dce.dce_priority, 
+					{processKey}:=dce.dce_process_key, 
+					{status}:=dce.dce_processing_status, 
+					{startDate}:=dce.DCE_START_DATE,
+					{endDate}:=dce.DCE_END_DATE,
+					{retryCnt}:=dce.DCE_RETRY_CNT,
+					{createdDate}:=dce.dce_created_date, 
+					{createdDatetimestamp}:=to_char(dce.dce_created_date,'mm/dd/yyyy hh24:mi:ss'),
+					{createdBy}:=dce.dce_created_by, 
+					{lastModifiedDate}:=dce.dce_last_modified_date, 
+					{lastModifiedBy}:=dce.dce_last_modified_by
+				from data_change_event dce 
+				where dce_processing_status={?:string1}
+				and dce.dce_event_skip_flag='N'
+				and dce_err_code > 3
+				order by dce.dce_priority
+			   ]]>	
+			  </stmt>
+		       	
+
+			<stmt id="PICK_THIS_EVENT_ON_STATUS_AND_ID">
+			   <![CDATA[	
+				select /*+ index(dce DCE_PROC_STATUS_IDX)*/
+					{id}:=dce.dce_id, 
+					{trnId}:=dce.DCE_TRN_ID,
+					{source}:=dce.DCE_SOURCE,
+					{processType}:=dce.DCE_PROCESS_TYPE,
+					{groupId}:=dce.dce_group_id, 
+					{priority}:=dce.dce_priority, 
+					{processKey}:=dce.dce_process_key, 
+					{startDate}:=dce.DCE_START_DATE,
+					{endDate}:=dce.DCE_END_DATE,
+					{retryCnt}:=dce.DCE_RETRY_CNT,
+					{status}:=dce.dce_processing_status, 
+					{createdDate}:=dce.dce_created_date, 
+					{createdDatetimestamp}:=to_char(dce.dce_created_date,'mm/dd/yyyy hh24:mi:ss'),
+					{createdBy}:=dce.dce_created_by, 
+					{lastModifiedDate}:=dce.dce_last_modified_date, 
+					{lastModifiedBy}:=dce.dce_last_modified_by
+				from data_change_event dce 
+				where  
+					dce.dce_processing_status={?:string2}
+					and dce.dce_event_skip_flag='N'
+					and dce.dce_last_modified_by={?:string1}
+				  ]]>	
+			</stmt>			       	
+				
+			<stmt id ="PICK_READY_EVENT_TO_BE_QUEUED">
+			   <![CDATA[	
+				update	data_change_event dce set
+				dce.dce_last_modified_by={?:string1},
+				dce.dce_processing_status='QUEUED'
+				where dce_id in (
+                    select pe.dce_id from ( 
+                        select /*+ index(dg1 DCE_PROC_STATUS_IDX)*/ dce_id from data_change_event  dg1
+                        where dg1.dce_processing_status='READY'
+						and dg1.dce_event_skip_flag='N'
+				        order by dg1.dce_priority desc, dg1.dce_created_date asc
+                    ) pe where rownum < {?:int1}
+                  ) and dce.dce_processing_status='READY' 
+				  ]]>	
+			</stmt>
+
+			<stmt id="GET_DATA_CHANGE_EVENTS_BY_STRING">
+				select 
+					{id}:=dce.dce_id, 
+					{trnId}:=dce.DCE_TRN_ID,
+					{source}:=dce.DCE_SOURCE,
+					{processType}:=dce.DCE_PROCESS_TYPE,
+					{groupId}:=dce.dce_group_id, 
+					{priority}:=dce.dce_priority, 
+					{processKey}:=dce.dce_process_key, 
+					{startDate}:=dce.DCE_START_DATE,
+					{endDate}:=dce.DCE_END_DATE,
+					{retryCnt}:=dce.DCE_RETRY_CNT,
+					{status}:=dce.dce_processing_status, 
+					{createdDate}:=dce.dce_created_date, 
+					{createdDatetimestamp}:=to_char(dce.dce_created_date,'mm/dd/yyyy hh24:mi:ss'),
+					{createdBy}:=dce.dce_created_by, 
+					{lastModifiedDate}:=dce.dce_last_modified_date, 
+					{lastModifiedBy}:=dce.dce_last_modified_by
+				from data_change_event dce 
+				{string1}
+			</stmt>			       	
+				
+			<stmt id="GET_DATA_CHANGE_EVENT_QUEUED_COUNTS">
+				 <![CDATA[
+					select /*+ index(data_change_event DCE_PROC_STATUS_IDX)*/ {int1}:= count(1) FROM data_change_event where dce_processing_status = 'QUEUED' and dce_event_skip_flag='N'
+				 ]]>
+	  		</stmt>
+
+		   <stmt id="UPDATE_DATA_CHANGE_EVENT_STATUS_BY_ID">
+				update   data_change_event set 
+					dce_processing_status={?:string1},
+					dce_last_modified_by={?:string2},
+					dce_last_modified_date = SYSDATE
+				where dce_id = {?:long1} 
+		   </stmt>
+		   <stmt id="UPDATE_DATA_CHANGE_EVENT_STATUS_AND_COMMENT_BY_ID">
+				update   data_change_event set 
+					dce_processing_status={?:string1},
+					dce_last_modified_by={?:string2},
+					dce_comment={?:string3},
+					dce_last_modified_date = SYSDATE
+				where dce_id = {?:long1} 
+		   </stmt>
+
+
+		   <stmt id="UPDATE_DATA_CHANGE_EVENT_IN_PROGRESS_BY_ID">
+				update   data_change_event set 
+					dce_processing_status={?:string1},
+					dce_start_date=SYSDATE,
+					dce_last_modified_by={?:string2},
+					dce_last_modified_date = SYSDATE
+				where dce_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_DATA_CHANGE_EVENT_IN_PROGRESS_AND_COMMENT_BY_ID">
+				update   data_change_event set 
+					dce_processing_status={?:string1},
+					dce_last_modified_by={?:string2},
+					dce_start_date=SYSDATE,
+					dce_comment={?:string3},
+					dce_last_modified_date = SYSDATE
+				where dce_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_DATA_CHANGE_EVENT_COMPLETED_BY_ID">
+				update   data_change_event set 
+					dce_processing_status={?:string1},
+					dce_end_date=SYSDATE,
+					dce_last_modified_by={?:string2},
+					dce_last_modified_date = SYSDATE
+				where dce_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_DATA_CHANGE_EVENT_COMPLETED_AND_COMMENT_BY_ID">
+				update   data_change_event set 
+					dce_processing_status={?:string1},
+					dce_last_modified_by={?:string2},
+					dce_end_date=SYSDATE,
+					dce_comment={?:string3},
+					dce_last_modified_date = SYSDATE
+				where dce_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_DATA_CHANGE_EVENT_ERROR_AND_MSG_BY_ID">
+				update   data_change_event set 
+					dce_processing_status='ERROR',
+					dce_last_modified_by={?:string2},
+					dce_end_date=SYSDATE,
+					dce_err_msg={?:string3},
+					dce_last_modified_date = SYSDATE
+				where dce_id = {?:long1} 
+		   </stmt>
+
+		</stmt-group>
+
+		<stmt-group id="PROPAGATION_FWK_GROUP">
+
+			<stmt id ="GET_PROPAGATION_EVENT">
+				select 
+				{id}:=pe.pe_id, 
+				{srcEventId}:=pe.PE_SRC_EVENT_ID,
+				{processKey}:=pe.pe_process_key, 
+				{processType}:=pe.PE_PROCESS_TYPE,
+				{groupObject1}:=pe.PE_GROUP_OBJECT1,
+				{processingStatus}:=pe.pe_processing_status, 
+				{startDate}:=pe.PE_START_DATE,
+				{endDate}:=pe.PE_END_DATE,
+				{retryCnt}:=pe.PE_RETRY_CNT,
+				{createdDate}:=pe.pe_created_date, 
+				{createdDatetimestamp}:=to_char(pe.pe_created_date,'mm/dd/yyyy hh24:mi:ss'),
+				{createdBy}:=pe.pe_created_by, 
+				{lastModifiedDate}:=pe.pe_last_modified_date, 
+				{groupId}:=pe.pe_group_id, 
+				{priority}:=pe.pe_priority, 
+				{source}:=pe.pe_source, 
+				{comment}:=pe.pe_comment,
+				{processedBy}:=pe.pe_processed_by
+				from PROPAGATION_EVENT pe where {sql}
+			</stmt>
+
+			<stmt id ="GET_PROPAGATION_EVENTS_BY_GROUP_ID">
+				select 
+				{id}:=pe.pe_id, 
+				{srcEventId}:=pe.PE_SRC_EVENT_ID,
+				{processKey}:=pe.pe_process_key, 
+				{processType}:=pe.PE_PROCESS_TYPE,
+				{groupObject1}:=pe.PE_GROUP_OBJECT1,
+				{processingStatus}:=pe.pe_processing_status, 
+				{startDate}:=pe.PE_START_DATE,
+				{endDate}:=pe.PE_END_DATE,
+				{retryCnt}:=pe.PE_RETRY_CNT,
+				{createdDate}:=pe.pe_created_date, 
+				{createdDatetimestamp}:=to_char(pe.pe_created_date,'mm/dd/yyyy hh24:mi:ss'),
+				{createdBy}:=pe.pe_created_by, 
+				{lastModifiedDate}:=pe.pe_last_modified_date, 
+				{groupId}:=pe.pe_group_id, 
+				{priority}:=pe.pe_priority, 
+				{source}:=pe.pe_source, 
+				{comment}:=pe.pe_comment,
+				{processedBy}:=pe.pe_processed_by
+				from PROPAGATION_EVENT pe where pe_group_ID = {?:long1} and pe_event_skip_flag='N' and pe_processing_status != 'COMPLETED'
+				order by pe_priority desc
+			</stmt>
+
+			<stmt id="GET_PROPAGATION_EVENTS_BY_STRING">
+				select 
+				{id}:=pe.pe_id, 
+				{srcEventId}:=pe.PE_SRC_EVENT_ID,
+				{processKey}:=pe.pe_process_key, 
+				{processType}:=pe.PE_PROCESS_TYPE,
+				{groupObject1}:=pe.PE_GROUP_OBJECT1,
+				{processingStatus}:=pe.pe_processing_status, 
+				{startDate}:=pe.PE_START_DATE,
+				{endDate}:=pe.PE_END_DATE,
+				{retryCnt}:=pe.PE_RETRY_CNT,
+				{createdDate}:=pe.pe_created_date, 
+				{createdDatetimestamp}:=to_char(pe.pe_created_date,'mm/dd/yyyy hh24:mi:ss'),
+				{createdBy}:=pe.pe_created_by, 
+				{lastModifiedDate}:=pe.pe_last_modified_date, 
+				{groupId}:=pe.pe_group_id, 
+				{priority}:=pe.pe_priority, 
+				{source}:=pe.pe_source, 
+				{comment}:=pe.pe_comment,
+				{processedBy}:=pe.pe_processed_by
+				from propagation_event pe
+				{string1}
+			</stmt>			       	
+
+		    <stmt id="PROPAGATION_EVENT_GROUPED_TO_WAIT">
+		        		update /*+ index(pe pe_proc_status_idx) */ propagation_event pe set 
+		       			pe.pe_processing_status='WAIT',
+		       			pe.pe_last_modified_date = SYSDATE,    
+		       			pe.pe_last_modified_by ={?:string1}
+		       		where 1=2 and pe.pe_processing_status IN ('READY','GROUPED')
+		       		      	and exists (
+						select /*+ index(pe1 pe_proc_status_idx) */  1 from propagation_event pe1 where
+						        pe1.pe_process_key=pe.pe_process_key
+								and pe1.pe_processing_status in ('QUEUED','INPROGRESS')
+								and pe1.pe_event_skip_flag='N'
+					)
+		       </stmt>
+				<stmt id="PROPAGATION_EVENT_GROUPED_TO_ERROR_WAIT">
+					update /*+ index(pe pe_proc_status_idx) */ propagation_event pe set 
+						pe.pe_processing_status='ERROR_WAIT',
+						pe.pe_last_modified_date = SYSDATE,
+						pe.pe_last_modified_by ={?:string1}
+					where 1=2 and pe.pe_processing_status in ('GROUPED')
+					and pe.pe_event_skip_flag='N'
+				and exists (
+					select /*+ index(pe1 pe_proc_status_idx) */  1 from propagation_event pe1 
+					where pe1.pe_process_key=pe.pe_process_key
+					and pe1.PE_SOURCE=pe.PE_SOURCE
+					and pe1.pe_processing_status = 'ERROR'
+					and pe1.pe_event_skip_flag='N'
+				)
+				</stmt>
+
+			<stmt id="PROPAGATION_EVENT_WAIT_TO_GROUPED">
+		       		update  /*+ index(pe pe_proc_status_idx) */ propagation_event pe set 
+		       			pe.pe_processing_status= 'GROUPED',
+		       			pe.pe_last_modified_date = SYSDATE,
+		       			pe.pe_last_modified_by ={?:string1}
+		       		where 1=2 and pe.pe_processing_status = 'WAIT' 
+					and pe.pe_event_skip_flag='N'
+		       		and not exists (
+					select /*+ index(pe1 pe_proc_status_idx) */  1 from propagation_event pe1
+					where   pe1.pe_process_key=pe.pe_process_key
+						and pe1.pe_event_skip_flag='N'
+						and pe1.pe_processing_status in ('QUEUED','INPROGRESS')
+						)
+		       	</stmt>
+
+			<stmt id="PROPAGATION_EVENT_ERRWAIT_TO_GROUPED">
+		       		update /*+ index(pe pe_proc_status_idx) */ propagation_event pe set 
+		       			pe.pe_processing_status= 'GROUPED',
+		       			pe.pe_last_modified_date = SYSDATE,
+		       			pe.pe_last_modified_by ={?:string1}
+		       		where pe.pe_processing_status = 'ERROR_WAIT'
+		       		and not exists (
+					select /*+ index(pe1 pe_proc_status_idx) */  1 from propagation_event pe1
+					where   pe1.pe_process_key=pe.pe_process_key
+						and pe1.pe_event_skip_flag='N'
+						and pe1.PE_SOURCE=pe.PE_SOURCE
+						and pe1.pe_processing_status ='ERROR'
+						) 
+						and not exists (
+						select /*+ index(pe2 pe_proc_status_idx) */ 1 from propagation_event pe2
+						where pe2.pe_id != pe.pe_id
+						and pe2.pe_src_event_id = pe.pe_src_event_id
+						and pe2.pe_event_skip_flag='N'
+						and pe2.pe_processing_status='ERROR')
+		       	</stmt>				
+
+
+		       	<stmt id="PROPAGATION_EVENT_WAIT_TO_ERRWAIT">
+				update /*+ index(pe pe_proc_status_idx) */ propagation_event pe set 
+					pe.pe_processing_status= 'ERROR_WAIT',
+					pe.pe_last_modified_date = SYSDATE,
+			        pe.pe_last_modified_by ={?:string1}
+			 	where pe.pe_processing_status = 'WAIT' 
+			       		and exists (
+						select /*+ index(pe1 pe_proc_status_idx) */ 1 from propagation_event pe1
+					where   pe1.pe_process_key=pe.pe_process_key
+						and pe1.pe_event_skip_flag='N'
+						and pe1.pe_processing_status ='ERROR'
+					)
+		       	</stmt>
+		       	
+			<stmt id="GET_PROPAGATION_EVENTS_BY_STATUS">
+		       	   <![CDATA[	
+				select /*+ index(pe pe_proc_status_idx) */ 
+					{id}:=pe.pe_id, 
+					{srcEventId}:=pe.PE_SRC_EVENT_ID,
+					{processKey}:=pe.pe_process_key, 
+					{processType}:=pe.PE_PROCESS_TYPE,
+					{groupObject1}:=pe.PE_GROUP_OBJECT1,
+					{processingStatus}:=pe.pe_processing_status, 
+					{startDate}:=pe.PE_START_DATE,
+					{endDate}:=pe.PE_END_DATE,
+					{retryCnt}:=pe.PE_RETRY_CNT,
+					{createdDate}:=pe.pe_created_date, 
+					{createdDatetimestamp}:=to_char(pe.pe_created_date,'mm/dd/yyyy hh24:mi:ss'),
+					{createdBy}:=pe.pe_created_by, 
+					{lastModifiedDate}:=pe.pe_last_modified_date, 
+					{lastModifiedBy}:=pe.pe_last_modified_by,
+					{groupId}:=pe.pe_group_id, 
+					{priority}:=pe.pe_priority, 
+					{source}:=pe.pe_source, 
+					{comment}:=pe.pe_comment,
+					{processedBy}:=pe.pe_processed_by
+				from propagation_event pe 
+				where pe_processing_status={?:string1}
+				and pe.pe_event_skip_flag='N'
+				order by pe.pe_priority
+			   ]]>	
+			</stmt>	
+
+		       	<stmt id="GET_PROPAGATION_EVENTS_BY_STATUS_W_ID">
+				   <![CDATA[	
+					select /*+ index(pe pe_proc_status_idx) */ 
+						{id}:=pe.pe_id, 
+						{srcEventId}:=pe.PE_SRC_EVENT_ID,
+						{processKey}:=pe.pe_process_key, 
+						{processType}:=pe.PE_PROCESS_TYPE,
+						{groupObject1}:=pe.PE_GROUP_OBJECT1,
+						{processingStatus}:=pe.pe_processing_status, 
+						{startDate}:=pe.PE_START_DATE,
+						{endDate}:=pe.PE_END_DATE,
+						{retryCnt}:=pe.PE_RETRY_CNT,
+						{createdDate}:=pe.pe_created_date, 
+						{createdDatetimestamp}:=to_char(pe.pe_created_date,'mm/dd/yyyy hh24:mi:ss'),
+						{createdBy}:=pe.pe_created_by, 
+						{lastModifiedDate}:=pe.pe_last_modified_date, 
+						{lastModifiedBy}:=pe.pe_last_modified_by,
+						{groupId}:=pe.pe_group_id, 
+						{priority}:=pe.pe_priority, 
+						{source}:=pe.pe_source, 
+						{comment}:=pe.pe_comment,
+						{processedBy}:=pe.pe_processed_by
+					from propagation_event pe 
+					where pe_processing_status={?:string1}
+					and pe.pe_event_skip_flag='N'
+					and pe_last_modified_by={?:string2}
+					]]>	
+		       	</stmt>			       	
+
+			<stmt id="GET_ERR_PROPAGATION_EVENTS">
+		       	   <![CDATA[	
+				select /*+ index(pe pe_proc_status_idx) */ 
+					{id}:=pe.pe_id, 
+					{srcEventId}:=pe.PE_SRC_EVENT_ID,
+					{processKey}:=pe.pe_process_key, 
+					{processType}:=pe.PE_PROCESS_TYPE,
+					{groupObject1}:=pe.PE_GROUP_OBJECT1,
+					{processingStatus}:=pe.pe_processing_status, 
+					{startDate}:=pe.PE_START_DATE,
+					{endDate}:=pe.PE_END_DATE,
+					{retryCnt}:=pe.PE_RETRY_CNT,
+					{createdDate}:=pe.pe_created_date, 
+					{createdDatetimestamp}:=to_char(pe.pe_created_date,'mm/dd/yyyy hh24:mi:ss'),
+					{createdBy}:=pe.pe_created_by, 
+					{lastModifiedDate}:=pe.pe_last_modified_date, 
+					{lastModifiedBy}:=pe.pe_last_modified_by,
+					{groupId}:=pe.pe_group_id, 
+					{priority}:=pe.pe_priority, 
+					{source}:=pe.pe_source, 
+					{comment}:=pe.pe_comment,
+					{processedBy}:=pe.pe_processed_by
+				from propagation_event pe 
+				where pe_processing_status={?:string1}
+				and pe.pe_event_skip_flag='N'
+				and pe_err_code > 3
+				order by pe.pe_priority
+			   ]]>	
+			  </stmt>
+		       	
+			<stmt id="PROPAGATION_EVENT_UPD_STATUS_BY_GROUP">
+		       		update propagation_event set 
+		       		        pe_group_id={?:groupId},
+		       			pe_processing_status={?:processingStatus},
+		       			pe_priority={?:priority},
+		       			pe_last_modified_date = SYSDATE,
+		       			pe_last_modified_by ={?:lastModifiedBy}
+		       		where pe_id={?:id}     				
+			</stmt>	
+
+
+			<stmt id ="PICK_GROUP_FOR_PROCESSING">
+			   <![CDATA[	
+				update	/*+ index(pe pe_proc_status_idx) */ propagation_event pe set
+				pe.pe_last_modified_by={?:string1},
+				pe.pe_processing_status={?:string2}
+				where pe_group_id = 
+                  (
+                    select pe.pe_group_id from ( 
+                        select  /*+ index(propagation_event pe_proc_status_idx) */ pe_group_id from propagation_event  
+                        where pe_processing_status='GROUPED'
+						and pe_event_skip_flag='N'
+				        order by pe_priority desc, pe_group_id asc
+                    ) pe where rownum=1 
+                  ) and pe.pe_processing_status='GROUPED' 
+				  ]]>	
+			</stmt>
+
+				
+			<stmt id ="PICK_GROUPED_EVENT_TO_BE_QUEUED">
+			   <![CDATA[	
+				update	propagation_event pe set
+				pe.pe_last_modified_by={?:string1},
+				pe.pe_processing_status='QUEUED'
+				where pe.pe_id in (
+                    select pe.pe_id from ( 
+                        select /*+ index(pe1 pe_proc_status_idx) */  pe1.pe_id from propagation_event  pe1
+                        where pe1.pe_processing_status='GROUPED'
+						and pe1.pe_event_skip_flag='N'
+				        order by pe1.pe_created_date asc
+                    ) pe where rownum < {?:int1}
+                  ) 
+				  ]]>	
+			</stmt>
+
+			<stmt id ="PICK_EVENTS_GROUP_ID_ON_STATUS_AND_ID">
+			   <![CDATA[	
+						select /*+ index(propagation_event pe_proc_status_idx) */ {groupId}:= distinct pe_group_id AS ID from propagation_event
+						where pe_processing_status='QUEUED' and pe_last_modified_by = {?:string1} and pe_event_skip_flag='N'
+				  ]]>	
+			</stmt>
+			
+
+			<stmt id="GET_PROPAGATION_EVENT_QUEUED_COUNT">
+				 <![CDATA[
+					select {int1}:= count(1) FROM (
+					select /*+ index(propagation_event pe_proc_status_idx) */ distinct pe_group_id
+					from propagation_event where pe_processing_status = 'QUEUED' and pe_event_skip_flag='N'
+					)
+				 ]]>
+	  		</stmt>
+
+		   <stmt id="UPDATE_PROPAGATION_EVENT_IN_PROGRESS_BY_ID">
+				update propagation_event set 
+					pe_processing_status={?:string1},
+					pe_start_date=SYSDATE,
+					pe_last_modified_by={?:string2},
+					pe_last_modified_date = SYSDATE
+				where pe_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_PROPAGATION_EVENT_IN_PROGRESS_AND_COMMENT_BY_ID">
+				update   propagation_event set 
+					pe_processing_status={?:string1},
+					pe_last_modified_by={?:string2},
+					pe_start_date=SYSDATE,
+					pe_comment={?:string3},
+					pe_last_modified_date = SYSDATE
+				where pe_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_PROPAGATION_EVENT_COMPLETED_BY_ID">
+				update   propagation_event set 
+					pe_processing_status={?:string1},
+					pe_end_date=SYSDATE,
+					pe_last_modified_by={?:string2},
+					pe_last_modified_date = SYSDATE
+				where pe_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_PROPAGATION_EVENT_COMPLETED_AND_COMMENT_BY_ID">
+				update   propagation_event set 
+					pe_processing_status={?:string1},
+					pe_last_modified_by={?:string2},
+					pe_end_date=SYSDATE,
+					pe_comment={?:string3},
+					pe_last_modified_date = SYSDATE
+				where pe_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_PROPAGATION_EVENT_ERROR_AND_MSG_BY_ID">
+				update   propagation_event set 
+					pe_processing_status='ERROR',
+					pe_last_modified_by={?:string2},
+					pe_end_date=SYSDATE,
+					PE_ERR_MSG={?:string3},
+					pe_last_modified_date = SYSDATE
+				where pe_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_PROPAGATION_EVENT_STATUS_BY_ID">
+				update   propagation_event set 
+					pe_processing_status={?:string1},
+					pe_last_modified_by={?:string2},
+					pe_last_modified_date = SYSDATE
+				where pe_id = {?:long1} 
+		   </stmt>
+
+		   <stmt id="UPDATE_PROPAGATION_EVENT_STATUS_AND_COMMENT_BY_ID">
+				update   propagation_event set 
+					pe_processing_status={?:string1},
+					pe_last_modified_by={?:string2},
+					pe_comment={?:string3},
+					pe_last_modified_date = SYSDATE
+				where pe_id = {?:long1} 
+		   </stmt>
+
+		</stmt-group>
+
+		<stmt-group id="CORONA_FWK_UTIL_GROUP">
+
+			<stmt id="GET_ALL_FORMAT_KEYS">
+				select 
+				{id}:=EKFM_ID,
+				{processType}:=EKFM_PROCESS_TYPE,
+				{processKeyFormat}:=EKFM_PROCESS_KEY_FORMAT,
+				{procKeyDelimiter}:=EKFM_PROC_KEY_DELIMITER,
+				{createdDate}:=EKFM_CREATED_DATE,
+				{createdBy}:=EKFM_CREATED_BY,
+				{lastModifiedDate}:=EKFM_LAST_MODIFIED_DATE,
+				{lastModifiedBy}:=EKFM_LAST_MODIFIED_BY
+				from EVENT_KEY_FORMAT_MAPPING
+			</stmt>
+
+
+			<stmt id="GET_EVENT_MAPPING_SQL">
+				select 
+				{id}:=EMR_ID,
+				{ruleName}:=EMR_RULE_NAME,
+				{inProcessType}:=EMR_IN_PROCESS_TYPE,
+				{outProcessType}:=EMR_OUT_PROCESS_TYPE,
+				{mappingSql}:=EMR_MAPPING_SQL
+				from EVENT_MAPPING_RULE
+			</stmt>
+
+			<stmt id="GET_REGIONAL_DEF_ATTR">
+				select 
+				{radRegionCode}:=RAD_REGION_CODE,
+				{radObjectName}:=RAD_OBJECT_NAME,
+				{radAttributeName}:=RAD_ATTRIBUTE_NAME,
+				{radAttributeValue}:=RAD_ATTRIBUTE_VALUE
+				from REGIONAL_ATTRIBUTE_DEFAULTS
+			</stmt>
+
+			<stmt id="GET_COUNTRY_CODES_VALUES">
+				select
+				{mandt}:=CC_MANDT,
+				{gpsyCountry}:=CC_GPSY_COUNTRY,
+				{kdkgr}:=CC_KDKGR,
+				{vtext}:=CC_VTEXT
+				from 
+				COUNTRY_CODES
+			</stmt>
+
+			<stmt id="GET_PRICE_TERM_VALUES">
+				Select 
+				{mandt}:=PT_MANDT,
+				{priceTerm}:=PT_PRICE_TERM,
+				{pltyp}:=PT_PLTYP,
+				{inco1}:=PT_INCO1,
+				{priceTermDesc}:=PT_PRICE_TERM_DESC
+				from PRICE_TERMS
+			</stmt>
+
+			<stmt id="GET_CURRENCY_VALUES">
+				select 
+				{mandt}:=C_MANDT,
+				{gpsyCurrency}:=C_GPSY_CURRENCY,
+				{waers}:=C_WAERS,
+				{isocd}:=C_ISOCD,
+				{ltext}:=C_LTEXT,
+				{ktext}:=C_KTEXT
+				FROM CURRENCIES
+			</stmt>
+			
+			<stmt id="GET_MODULE_ACCESS_DATA">
+				select
+				{moduleId}:=MCT_MODULE_ID,
+				{moduleExpression}:=MCT_EXPRESSION
+				FROM MODULE_CONTROL_TAB
+			</stmt>
+
+		</stmt-group>
+
+	</comcat-dax-config>
